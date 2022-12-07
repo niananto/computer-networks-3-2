@@ -1,0 +1,224 @@
+====== 2 switch VLan =====
+Switch(config)#
+vlan 30
+name student
+exit
+vlan 40
+name teacher
+exit
+vlan 50
+name s
+exit
+interface f0/1
+switchport mode access
+switchport access vlan 30
+exit
+interface f0/2
+switchport mode access
+switchport access vlan 40
+exit
+interface f0/3
+switchport mode trunk
+switchport trunk native vlan 50
+switchport trunk allowed vlan 30,40,50
+exit
+// do the same for both switches
+// and make sure the ip addresses of the pc's are in the same subnet
+
+===== legacy vlan =====
+Switch(config)#
+vlan 10
+vlan 30
+!pc1
+interface f0/1
+switchport access vlan 10
+!router
+interface f0/3
+switchport access vlan 10
+!pc2
+interface f0/2
+switchport access vlan 30
+!router
+interface f0/4
+switchport access vlan 30
+exit
+
+===== router on a stick vlan =====
+Switch(config)#
+vlan 10
+name student
+vlan 30
+name teacher
+!pc1
+interface f0/1
+!switchport mode access
+switchport access vlan 10
+!pc2
+interface f0/2
+!switchport mode access
+switchport access vlan 30
+!router
+interface f0/3
+switchport mode trunk
+switchport trunk allowed vlan 10,30
+exit
+
+Router(config)#
+!subinterface configuration
+int g0/0.10
+encapsulation dot1Q 10
+ip address 192.168.10.1 255.255.255.0
+int g0/0.30
+encapsulation dot1Q 30
+ip address 192.168.30.1 255.255.255.0
+int g0/0
+ip address 192.168.20.1 255.255.255.0
+!add this ip to the pc's default gateway
+no shutdown
+exit
+
+===== static default routing =====
+// to add serial into a router 2901
+// add HWIC-2T from the physical modules
+!side of the pc
+R1(config)# 
+interface gig0/0
+ip address 192.168.10.1 255.255.255.0
+no shutdown
+interface gig0/1
+ip address 192.168.20.1 255.255.255.0
+no shutdown
+exit
+
+interface s0/3/0
+ip address 100.1.1.1 255.255.255.252
+!clock rate 64000
+no shutdown
+
+!side of the server
+R2(config)#
+interface s0/3/0
+ip address 100.1.1.2 255.255.255.252
+no shutdown
+
+!static default route settigs
+R1(config)#
+ip route 0.0.0.0 0.0.0.0 s0/3/0
+R2(config)#
+ip route 0.0.0.0 0.0.0.0 s0/3/0
+
+!goto any pc's browser and enter 100.100.100.2
+
+===== static NAT =====
+!something... then
+!side of the pc
+R1(config)#
+interface g0/0
+ip nat inside
+interface g0/1
+ip nat inside
+interface s0/3/0
+ip nat outside
+
+
+===== dynamic NAT =====
+R1(config)#
+ip nat pool BUET-Pool 209.165.200.8 209.165.200.11 netmask 255.255.255.224
+! ekhane 255.255.255.240 dewar kotha na?
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 permit 192.168.20.0 0.0.0.255
+ip nat inside source list 1 pool BUET-Pool
+
+!goto any pc's browser and enter 100.100.100.2
+!they will getr allocated some ip from the pool
+!now you'll see the list of the NATs
+R1#
+show ip nat translations
+
+===== PAT == dynamic NAT with overload =====
+R1(config)#
+ip nat pool BUET-Pool 209.165.200.8 209.165.200.11 netmask 255.255.255.224
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 permit 192.168.20.0 0.0.0.255
+ip nat inside source list 1 pool BUET-Pool overload
+
+
+===== ACL == access control list =====
+// per port ACL
+// g0/0 => inbound, outbound + ipv4, ipv6 => 4ACL
+
+
+===== Numbered Standard ACL (src) closest to dest =====
+R1(config)#
+access-list 10 remark ACE permits ONLY host 192.168.10.10 to the internet
+access-list 10 permit host 192.168.10.10
+access-list deny any remark this is default deny
+exit
+show access-lists
+conf t
+access-list 10 remark ACE permits all host in LAN 2
+access-list 10 permit 192.168.20.0 0.0.0.255
+exit
+show access-lists
+conf t
+
+!inbound
+interface g0/0
+ip access-group 10 in
+exit
+
+!outbound
+interface s0/3/0
+ip access-group 10 out
+exit
+
+R1#
+show run | section access-list
+show ip int s0/1/0 | include access list
+
+===== Named Standard ACL (src) =====
+R1(config)#
+no access-list 1
+!deleting access-list 10 too
+no access-list 10
+ip access-list standard PERMIT-ACCESS
+remark ACE permits host 192.168.10.10
+permit host 192.168.10.10
+remark ACE permits all host in LAN 2
+permit 192.168.20.0 0.0.0.255
+exit
+
+interface s0/1/0
+ip access-group PERMIT-ACCESS out
+exit
+
+===== Named Extended ACL (src, dest, port) closest to src =====
+R1(config)#
+no access-list 1
+ip access-list extended FILTER
+! permit tcp 192.168.10.0 0.0.0.255 host 100.100.100.3 any eq 21
+permit tcp 192.168.10.0 0.0.0.255 host 100.100.100.3 any eq FTP
+permit tcp 192.168.10.0 0.0.0.255 host 100.100.100.3 any eq FTP-DATA
+! permit tcp 192.168.10.0 0.0.0.255 host 100.100.100.2 any www
+permit tcp 192.168.10.0 0.0.0.255 host 100.100.100.2 any 80
+deny tcp 192.168.20.0 0.0.0.255 host 100.100.100.2 any 80
+! deny ip any any remark this is default deny
+
+int s0/3/0
+ip access-group FILTER out
+
+===== Numbered Extended ACL (src, dest, port) closest to src =====
+R1(config)#
+access-list 101  permit tcp host  192.168.10.5  host 192.168.50.5 eq www
+access-list 101  deny   tcp host  192.168.10.5  host 192.168.50.6 eq ftp
+
+access-list 101  permit tcp host  192.168.20.5  host 192.168.50.6 eq ftp
+access-list 101  deny   tcp host  192.168.20.5  host 192.168.50.5 eq www
+
+access-list 101 permit ip any any
+
+int g0/0.10
+ip access-group 101 in
+
+int g0/0.20
+ip access-group 101 in
