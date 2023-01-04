@@ -1,0 +1,2896 @@
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:14:50 BDT 2023
+Content-type: text/html
+Content-Length: 590
+Connection: close
+
+
+
+Request:
+GET /3-2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:16:04 BDT 2023
+Content-type: text/html
+Content-Length: 1480
+Connection: close
+
+
+
+Request:
+GET /3-2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:16:31 BDT 2023
+Content-type: text/html
+Content-Length: 1480
+Connection: close
+
+
+
+Request:
+GET /3-2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:23:43 BDT 2023
+Content-type: text/html
+Content-Length: 1480
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:39:38 BDT 2023
+Content-type: text/html
+Content-Length: 172
+Connection: close
+
+
+
+Request:
+GET /root/file1.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:39:40 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:40:40 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:41:00 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:41:16 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:41:51 BDT 2023
+Content-type: text/html
+Content-Length: 172
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:41:58 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:42:02 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:42:19 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:42:39 BDT 2023
+Content-type: text/html
+Content-Length: 590
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:43:44 BDT 2023
+Content-type: text/html
+Content-Length: 590
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:43:45 BDT 2023
+Content-type: text/html
+Content-Length: 590
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:43:51 BDT 2023
+Content-type: text/html
+Content-Length: 334
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:44:02 BDT 2023
+Content-type: text/html
+Content-Length: 176
+Connection: close
+
+
+
+Request:
+GET /src HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:45:05 BDT 2023
+Content-type: text/html
+Content-Length: 84
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:45:55 BDT 2023
+Content-type: text/html
+Content-Length: 334
+Connection: close
+
+
+
+Request:
+GET /log.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:45:56 BDT 2023
+Content-type: text/plain
+Content-Length: 3773
+Connection: close
+
+
+
+Request:
+GET /src HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:46:03 BDT 2023
+Content-type: text/html
+Content-Length: 84
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:46:06 BDT 2023
+Content-type: text/html
+Content-Length: 334
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:46:09 BDT 2023
+Content-type: text/html
+Content-Length: 176
+Connection: close
+
+
+
+Request:
+GET /root/file1.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:46:10 BDT 2023
+Content-type: text/plain
+Content-Length: 22
+Connection: close
+
+
+
+Request:
+GET /root/file1.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:46:22 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:46:25 BDT 2023
+Content-type: text/html
+Content-Length: 263
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:46:27 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:46:32 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:47:17 BDT 2023
+Content-type: text/html
+Content-Length: 176
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:51:25 BDT 2023
+Content-type: text/html
+Content-Length: 334
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:51:30 BDT 2023
+Content-type: text/html
+Content-Length: 176
+Connection: close
+
+
+
+Request:
+GET /out HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:51:39 BDT 2023
+Content-type: text/html
+Content-Length: 102
+Connection: close
+
+
+
+Request:
+GET /out/production HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:51:41 BDT 2023
+Content-type: text/html
+Content-Length: 111
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:52:07 BDT 2023
+Content-type: text/html
+Content-Length: 167
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:52:08 BDT 2023
+Content-type: text/html
+Content-Length: 167
+Connection: close
+
+
+
+Request:
+GET /dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:52:11 BDT 2023
+Content-type: text/html
+Content-Length: 247
+Connection: close
+
+
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:52:14 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/file1.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:52:22 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:52:28 BDT 2023
+Content-type: text/html
+Content-Length: 167
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:53:04 BDT 2023
+Content-type: text/html
+Content-Length: 172
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:54:55 BDT 2023
+Content-type: text/html
+Content-Length: 172
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:55:00 BDT 2023
+Content-type: text/html
+Content-Length: 334
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:55:03 BDT 2023
+Content-type: text/html
+Content-Length: 176
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:55:06 BDT 2023
+Content-type: text/html
+Content-Length: 263
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:55:08 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:57:07 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:57:11 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:57:43 BDT 2023
+Content-type: text/html
+Content-Length: 263
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:57:48 BDT 2023
+Content-type: text/html
+Content-Length: 263
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:57:49 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/dir2 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:59:21 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 00:59:24 BDT 2023
+Content-type: text/html
+Content-Length: 175
+Connection: close
+
+
+
+Request:
+GET /root/dir1/root/dir1/dir2/dir3 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:00:21 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:01:03 BDT 2023
+Content-type: text/html
+Content-Length: 176
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:01:10 BDT 2023
+Content-type: text/html
+Content-Length: 162
+Connection: close
+
+
+
+Request:
+GET /dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:01:10 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:03:24 BDT 2023
+Content-type: text/html
+Content-Length: 162
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:03:24 BDT 2023
+Content-type: text/html
+Content-Length: 162
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:03:26 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:03:32 BDT 2023
+Content-type: text/html
+Content-Length: 162
+Connection: close
+
+
+
+Request:
+GET /dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:03:34 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:04:05 BDT 2023
+Content-type: text/html
+Content-Length: 172
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:04:07 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:12:13 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:12:16 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:12:19 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:12:35 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:12:52 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:13:52 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/dir2 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:14:02 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:14:03 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:14:06 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:14:37 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:14:40 BDT 2023
+Content-type: text/html
+Content-Length: 257
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:15:46 BDT 2023
+Content-type: text/html
+Content-Length: 303
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:16:00 BDT 2023
+Content-type: text/html
+Content-Length: 211
+Connection: close
+
+
+
+Request:
+GET /root/doc1.docx HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:16:03 BDT 2023
+Content-type: application/octet-stream
+Content-Length: 70
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:16:21 BDT 2023
+Content-type: text/html
+Content-Length: 303
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:17:13 BDT 2023
+Content-type: text/html
+Content-Length: 304
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:17:15 BDT 2023
+Content-type: text/html
+Content-Length: 172
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:17:54 BDT 2023
+Content-type: text/html
+Content-Length: 304
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:17:56 BDT 2023
+Content-type: text/html
+Content-Length: 172
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:17:59 BDT 2023
+Content-type: text/html
+Content-Length: 115
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/pdfsend.pdf HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:18:46 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:19:15 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:19:19 BDT 2023
+Content-type: text/html
+Content-Length: 304
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:19:25 BDT 2023
+Content-type: text/html
+Content-Length: 307
+Connection: close
+
+
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:19:27 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:19:30 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:19:31 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/file1.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:19:36 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:25:25 BDT 2023
+Content-type: text/html
+Content-Length: 214
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:25:27 BDT 2023
+Content-type: text/html
+Content-Length: 307
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:25:29 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:25:30 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:25:35 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:25:49 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:26:05 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:29:26 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:29:31 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:37:29 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:39:02 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:39:22 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:43:04 BDT 2023
+Content-type: text/html
+Content-Length: 205
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:43:34 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:43:36 BDT 2023
+Content-type: image/jpg
+Content-Length: 2574631
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:47:03 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:47:11 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:48:29 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:48:52 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:51:24 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:52:55 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:52:55 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:53:06 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:53:12 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:53:14 BDT 2023
+Content-type: text/plain
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:54:49 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:54:50 BDT 2023
+Content-type: image/jpg
+Content-Length: 2573994
+Connection: close
+
+
+
+Request:
+GET /root/file1.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:54:56 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:54:59 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:55:00 BDT 2023
+Content-type: text/html
+Content-Length: 173
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:55:01 BDT 2023
+Content-type: text/html
+Content-Length: 116
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3/file3.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:55:02 BDT 2023
+Content-type: text/plain
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:56:51 BDT 2023
+Content-type: text/html
+Content-Length: 116
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:56:56 BDT 2023
+Content-type: text/html
+Content-Length: 116
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:56:57 BDT 2023
+Content-type: text/html
+Content-Length: 116
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3/file3.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:56:57 BDT 2023
+Content-type: text/plain
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3/file3.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:57:17 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:58:13 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:58:13 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:58:27 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 01:58:38 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:03:06 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:03:07 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:03:15 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:03:16 BDT 2023
+Content-type: image/jpg
+Content-Length: 2718541
+Connection: close
+
+
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:03:16 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:14 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:26 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/pdfsend.pdf HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:28 BDT 2023
+Content-type: application/octet-stream
+Content-Length: 633428
+Connection: close
+
+
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:28 BDT 2023
+Content-type: application/octet-stream
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:34 BDT 2023
+Content-type: text/html
+Content-Length: 173
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/send.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:36 BDT 2023
+Content-type: text/plain
+Content-Length: 750
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:39 BDT 2023
+Content-type: text/html
+Content-Length: 116
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3/file3.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:39 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:43 BDT 2023
+Content-type: text/html
+Content-Length: 205
+Connection: close
+
+
+
+Request:
+GET /root/doc1.docx HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:44 BDT 2023
+Content-type: application/octet-stream
+Content-Length: 11260
+Connection: close
+
+
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:06:44 BDT 2023
+Content-type: application/octet-stream
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:11:32 BDT 2023
+Content-type: text/html
+Content-Length: 205
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:11:33 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:11:34 BDT 2023
+Content-type: image/jpg
+Content-Length: 2718541
+Connection: close
+
+
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:11:34 BDT 2023
+Content-type: image/jpg
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:02 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:03 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:07 BDT 2023
+Content-type: text/html
+Content-Length: 205
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:07 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:09 BDT 2023
+Content-type: image/jpg
+Content-Length: 2718541
+Connection: close
+
+
+
+Request:
+GET /root/dir1/pdfsend.pdf HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:13 BDT 2023
+Content-type: application/octet-stream
+Content-Length: 633428
+Connection: close
+
+
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:52 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:55 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:22:56 BDT 2023
+Content-type: text/plain
+Content-Length: 5
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:25:55 BDT 2023
+Content-type: text/html
+Content-Length: 298
+Connection: close
+
+
+
+Request:
+GET /root/dir1/file2.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:25:55 BDT 2023
+Content-type: text/plain
+Content-Length: 4
+Connection: close
+
+
+
+Request:
+GET /root/dir1/imgsend.jpg HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:25:57 BDT 2023
+Content-type: image/jpg
+Content-Length: 2718541
+Connection: close
+
+
+
+Request:
+GET /root/dir1/pdfsend.pdf HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:26:00 BDT 2023
+Content-type: application/octet-stream
+Content-Length: 633428
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:28:02 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:28:02 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:28:46 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:28:47 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:28:49 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:29:12 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:40:37 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:40:48 BDT 2023
+Content-type: text/html
+Content-Length: 205
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:40:53 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:41:16 BDT 2023
+Content-type: text/html
+Content-Length: 457
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:41:22 BDT 2023
+Content-type: text/html
+Content-Length: 211
+Connection: close
+
+
+
+Request:
+GET /root/dir1 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:41:23 BDT 2023
+Content-type: text/html
+Content-Length: 306
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:41:24 BDT 2023
+Content-type: text/html
+Content-Length: 177
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3 HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:41:24 BDT 2023
+Content-type: text/html
+Content-Length: 118
+Connection: close
+
+
+
+Request:
+GET /root/dir1/dir2/dir3/file3.txt HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:41:25 BDT 2023
+Content-type: text/plain
+Content-Length: 4
+Connection: close
+
+
+
+Request:
+GET /root/dir1/pdfsend.pdf HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:41:29 BDT 2023
+Content-type: application/octet-stream
+Content-Length: 633428
+Connection: close
+
+
+
+Request:
+GET / HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:46:33 BDT 2023
+Content-type: text/html
+Content-Length: 110
+Connection: close
+
+
+
+Response:
+HTTP/1.1 404 Not Found
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:46:33 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+GET /root HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:46:34 BDT 2023
+Content-type: text/html
+Content-Length: 205
+Connection: close
+
+
+
+Request:
+GET /uploads HTTP/1.1
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 02:46:36 BDT 2023
+Content-type: text/html
+Content-Length: 36
+Connection: close
+
+
+
+Request:
+UPLOAD ss.png
+
+Request:
+UPLOAD ss.png
+
+Request:
+UPLOAD ss.png
+
+Request:
+UPLOAD ss.png
+
+Request:
+UPLOAD a.jpg
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Wed Jan 04 13:02:52 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+UPLOADING
+

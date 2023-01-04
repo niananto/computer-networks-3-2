@@ -1,26 +1,28 @@
 ====== 2 switch VLan =====
 Switch(config)#
-vlan 30
+vlan 10
 name student
 exit
-vlan 40
+vlan 20
 name teacher
 exit
-vlan 50
-name s
-exit
+! vlan 50
+! name s
+! exit
 interface f0/1
 switchport mode access
-switchport access vlan 30
+switchport access vlan 10
 exit
 interface f0/2
 switchport mode access
-switchport access vlan 40
+switchport access vlan 20
 exit
 interface f0/3
 switchport mode trunk
-switchport trunk native vlan 50
-switchport trunk allowed vlan 30,40,50
+! switchport trunk native vlan 50
+switchport trunk native vlan 1
+! switchport trunk allowed vlan 10,20,50
+switchport trunk allowed vlan 10,20,1
 exit
 // do the same for both switches
 // and make sure the ip addresses of the pc's are in the same subnet
@@ -28,39 +30,46 @@ exit
 ===== legacy vlan =====
 Switch(config)#
 vlan 10
-vlan 30
+vlan 20
 !pc1
 interface f0/1
 switchport access vlan 10
+no shutdown
 !router
 interface f0/3
 switchport access vlan 10
+no shutdown
 !pc2
 interface f0/2
-switchport access vlan 30
+switchport access vlan 20
+no shutdown
 !router
 interface f0/4
-switchport access vlan 30
+switchport access vlan 20
+no shutdown
 exit
 
 ===== router on a stick vlan =====
 Switch(config)#
 vlan 10
 name student
-vlan 30
+vlan 20
 name teacher
 !pc1
 interface f0/1
 !switchport mode access
 switchport access vlan 10
+no shutdown
 !pc2
 interface f0/2
 !switchport mode access
-switchport access vlan 30
+switchport access vlan 20
+no shutdown
 !router
 interface f0/3
 switchport mode trunk
-switchport trunk allowed vlan 10,30
+switchport trunk allowed vlan 10,20
+no shutdown
 exit
 
 Router(config)#
@@ -68,11 +77,11 @@ Router(config)#
 int g0/0.10
 encapsulation dot1Q 10
 ip address 192.168.10.1 255.255.255.0
-int g0/0.30
-encapsulation dot1Q 30
-ip address 192.168.30.1 255.255.255.0
-int g0/0
+int g0/0.20
+encapsulation dot1Q 20
 ip address 192.168.20.1 255.255.255.0
+int g0/0
+ip address 192.168.30.1 255.255.255.0
 !add this ip to the pc's default gateway
 no shutdown
 exit
@@ -124,7 +133,7 @@ ip nat outside
 ===== dynamic NAT =====
 R1(config)#
 ip nat pool BUET-Pool 209.165.200.8 209.165.200.11 netmask 255.255.255.224
-! ekhane 255.255.255.240 dewar kotha na?
+! ekhane 255.255.255.240 dewar kotha na
 access-list 1 permit 192.168.10.0 0.0.0.255
 access-list 1 permit 192.168.20.0 0.0.0.255
 ip nat inside source list 1 pool BUET-Pool
@@ -152,7 +161,7 @@ ip nat inside source list 1 pool BUET-Pool overload
 R1(config)#
 access-list 10 remark ACE permits ONLY host 192.168.10.10 to the internet
 access-list 10 permit host 192.168.10.10
-access-list deny any remark this is default deny
+access-list 10 deny any remark this is default deny
 exit
 show access-lists
 conf t
@@ -174,7 +183,7 @@ exit
 
 R1#
 show run | section access-list
-show ip int s0/1/0 | include access list
+show ip int s0/3/0 | include access list
 
 ===== Named Standard ACL (src) =====
 R1(config)#
