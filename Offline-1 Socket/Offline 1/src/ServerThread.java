@@ -7,8 +7,8 @@ public class ServerThread extends Thread {
     private final BufferedReader in;
     private final PrintWriter pr;
     private final BufferedWriter logWriter;
-    private static final int CHUNK_SIZE = 16;
-    private static int serverThreadCount = 0;
+    private static final int CHUNK_SIZE = 32;
+    public static int serverThreadCount = 0;
     private static final String ROOT_DIR = "root";
     private final DataOutputStream dataOut;
     private final DataInputStream dataIn;
@@ -80,7 +80,7 @@ public class ServerThread extends Thread {
                 "\r\n";
     }
 
-    private static void sendResponse200(String contentType, int contentLength, String content, PrintWriter pr, BufferedWriter logWriter) throws IOException {
+    private void sendResponse200(String contentType, int contentLength, String content) throws IOException {
         String res = response200(contentType, contentLength);
         pr.write(res + content);
         pr.flush();
@@ -88,7 +88,7 @@ public class ServerThread extends Thread {
         logWriter.flush();
     }
 
-    private static void sendData(File directory, DataOutputStream dataOut) throws IOException {
+    private void sendData(File directory) throws IOException {
         FileInputStream fis = new FileInputStream(directory);
         byte[] buffer = new byte[CHUNK_SIZE];
         int bytesRead;
@@ -99,7 +99,7 @@ public class ServerThread extends Thread {
         fis.close();
     }
 
-    private void handleGetRequest(String input) throws IOException {
+    private void handleGetRequest(String input) throws Exception {
 
         String contentType = "";
         String reqPath = input.split(" ")[1];
@@ -109,10 +109,10 @@ public class ServerThread extends Thread {
             contentType = "text/html";
             String content = "<html><body><ul>\n"
                     + "\t<li><a href=\"root\">root</a></li>\n"
-                    + "\t<li><a href=\"uploads\">uploads</a></li>\n"
+                    + "\t<li><a href=\"uploaded\">uploaded</a></li>\n"
                     + "</ul></body></html>";
 
-            sendResponse200(contentType, content.length(), content, pr, logWriter);
+            sendResponse200(contentType, content.length(), content);
         }
 
         reqPath = reqPath.replaceFirst("/", "");
@@ -122,6 +122,7 @@ public class ServerThread extends Thread {
             pr.flush();
             logWriter.write("Response:\n" + response404() + "\n\n");
             logWriter.flush();
+            System.out.println("404 Not Found - " + reqPath);
             return;
         }
 
@@ -160,7 +161,7 @@ public class ServerThread extends Thread {
                 sb.append("</a></li>\n");
             }
             sb.append("</ul></body></html>");
-            sendResponse200(contentType, sb.toString().getBytes().length, sb.toString(), pr, logWriter);
+            sendResponse200(contentType, sb.toString().getBytes().length, sb.toString());
             return;
 
         }
@@ -181,11 +182,12 @@ public class ServerThread extends Thread {
 
         } else {
             contentType = "application/octet-stream";
+
         }
 
-        sendResponse200(contentType, (int) directory.length(), "", pr, logWriter);
+        sendResponse200(contentType, (int) directory.length(), "");
         // Read the file and send it to the client
-        sendData(directory, dataOut);
+        sendData(directory);
     }
 
     private void handleUploadRequest(String input) throws IOException {
@@ -200,12 +202,11 @@ public class ServerThread extends Thread {
         }
 
         // send response
-        sendResponse200("text/html", 0, "", pr, logWriter);
+        sendResponse200("text/html", 0, "");
 
         String[] t = tokens[1].split("/");
         String fileName = t[t.length - 1];
-        fileName = fileName.replaceAll("%20", " ");
-        long fileSize = -1;
+//        fileName = fileName.replaceAll("%20", " ");
 
 
         String reqMsg = in.readLine();
@@ -219,17 +220,25 @@ public class ServerThread extends Thread {
             byte[] buffer = new byte[CHUNK_SIZE];
             int bytes;
 
-            fileSize = dataIn.readLong();
+            long fileSize = dataIn.readLong();
+            long received = 0;
             while (fileSize > 0 && (bytes = dataIn.read(buffer, 0, (int) Math.min(buffer.length, fileSize))) != -1) {
                 fos.write(buffer, 0, bytes);
                 fos.flush();
-                fileSize -= bytes;
+
+                // show progress bar here
+//                received += bytes;
+//                System.out.print("\r" + (received * 100 / fileSize) + "%\t");
+//                for (int i=0; i<received*20/fileSize; i++) {
+//                    System.out.print("=");
+//                }
             }
+            System.out.println();
             fos.close();
-            System.out.println("File uploaded successfully");
+            System.out.println("Upload complete: " + fileName);
 
         } else {
-            System.out.println("File upload failed");
+            System.out.println("Upload failed: " + fileName);
 
             String res = response417();
             pr.write(res);
@@ -263,11 +272,13 @@ public class ServerThread extends Thread {
                 logWriter.flush();
                 return;
             }
-
             if (input.startsWith("GET")) {
                 handleGetRequest(input);
-            } else if (input.startsWith("UPLOAD")) {
+                return;
+            }
+            if (input.startsWith("UPLOAD")) {
                 handleUploadRequest(input);
+                return;
             }
 
         } catch (Exception e) {
