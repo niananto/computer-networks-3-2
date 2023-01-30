@@ -1,25 +1,19 @@
 #!/bin/bash
 
-# starting by creating file for recording statistics
-echo -e "\n------------------ run.sh: starting -----------------\n"
-touch stat.st
+touch output.csv
 
-# defining baseline parameters
-baseline_area_side=500
-baseline_nodes=40
-baseline_flows=20
+default_size=500
+default_nodes=40
+default_flows=20
 
-# generating statistics and plotting graphs 
-# by running simulation with varying area size and parsing generated trace files
-echo -e "Area-Size-(m-per-side)\nNetwork-Throughtput-(kilobits-per-sec) End-to-End-Avg-Delay-(sec) Packet-Delivery-Ratio-(%) Packet-Drop-Ratio-(%)" > stat.st
-echo -e "------------- run.sh: varying area size -------------\n"
+echo -e "size-(m^2),network-throughput-(kbps),end-to-end-avg-delay-(sec),packet-delivery-ratio-(%),packet-drop-ratio-(%)" > output.csv
 
 for((i=0; i<5; i++)); do
-    area_side=`expr 250 + $i \* 250`
-    echo -e $area_side >> stat.st
+    size=`expr 250 + $i \* 250`
+    echo -n "$size," >> output.csv
 
-    echo -e "1805093.tcl: running with $area_side $baseline_nodes $baseline_flows\n"
-    ns 1805093.tcl $area_side $baseline_nodes $baseline_flows
+    echo -e "1805093.tcl: running with $size $default_nodes $default_flows\n"
+    ns 1805093.tcl $size $default_nodes $default_flows
     echo -e "\nparser_1.py: running\n"
     python3 parser_1.py
 done
@@ -27,17 +21,15 @@ done
 echo -e "plotter.py: running\n"
 python3 plotter.py
 
-# generating statistics and plotting graphs 
-# by running simulation with varying number of nodes and parsing generated trace files
-echo -e "Number-of-Nodes\nNetwork-Throughtput-(kilobits-per-sec) End-to-End-Avg-Delay-(sec) Packet-Delivery-Ratio-(%) Packet-Drop-Ratio-(%)" > stat.st
-echo -e "---------- run.sh: varying number of nodes ----------\n"
+
+echo -e "nodes,network-throughput-(kbps),end-to-end-avg-delay-(sec),packet-delivery-ratio-(%),packet-drop-ratio-(%)" > output.csv
 
 for((i=0; i<5; i++)); do
     nodes=`expr 20 + $i \* 20`
-    echo -e $nodes >> stat.st
+    echo -n "$nodes," >> output.csv
 
-    echo -e "1805093.tcl: running with $baseline_area_side $nodes $baseline_flows\n"
-    ns 1805093.tcl $baseline_area_side $nodes $baseline_flows
+    echo -e "1805093.tcl: running with $default_size $nodes $default_flows\n"
+    ns 1805093.tcl $default_size $nodes $default_flows
     echo -e "\nparser_1.py: running\n"
     python3 parser_1.py
 done
@@ -45,17 +37,15 @@ done
 echo -e "plotter.py: running\n"
 python3 plotter.py
 
-# generating statistics and plotting graphs 
-# by running simulation with varying number of flows and parsing generated trace files
-echo -e "Number-of-Flows\nNetwork-Throughtput-(kilobits-per-sec) End-to-End-Avg-Delay-(sec) Packet-Delivery-Ratio-(%) Packet-Drop-Ratio-(%)" > stat.st
-echo -e "---------- run.sh: varying number of flows ----------\n"
+
+echo -e "flows,network-throughput-(kbps),end-to-end-avg-delay-(sec),packet-delivery-ratio-(%),packet-drop-ratio-(%)" > output.csv
 
 for((i=0; i<5; i++)); do
     flows=`expr 10 + $i \* 10`
-    echo -e $flows >> stat.st
+    echo -n "$flows," >> output.csv
 
-    echo -e "1805093.tcl: running with $baseline_area_side $baseline_nodes $flows\n"
-    ns 1805093.tcl $baseline_area_side $baseline_nodes $flows
+    echo -e "1805093.tcl: running with $default_size $default_nodes $flows\n"
+    ns 1805093.tcl $default_size $default_nodes $flows
     echo -e "\nparser_1.py: running\n"
     python3 parser_1.py
 done
@@ -63,6 +53,5 @@ done
 echo -e "plotter.py: running\n"
 python3 plotter.py
 
-# terminating by removing intermediary nam, stat, and trace files
-echo -e "---------------- run.sh: terminating ----------------\n"
-rm animation.nam stat.st trace.tr
+
+rm animation.nam output.csv trace.tr

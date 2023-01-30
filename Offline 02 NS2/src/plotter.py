@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt 
 
-# reading statistics from stat.st
-stat_file = open("stat.st", "r")
-parameter = stat_file.readline()
-metrics = stat_file.readline().split()
+# reading statistics from output.csv
+out_file = open("output.csv", "r")
+metrics = out_file.readline().split(",")
 
 parameters = []
 network_throughputs = []
@@ -11,47 +10,47 @@ end_to_end_avg_delays = []
 packet_delivery_ratios = []
 packet_drop_ratios = []
 
-for line in stat_file:
-    if len(line.split()) == 1:
-        parameters.append(int(line))
-    else:
-        split_list = line.split()
-        network_throughputs.append(float(split_list[0]))
-        end_to_end_avg_delays.append(float(split_list[1]))
-        packet_delivery_ratios.append(float(split_list[2]))
-        packet_drop_ratios.append(float(split_list[3]))
+for line in out_file:
+    split_list = line.split(",")
+    parameters.append(int(split_list[0]))
+    network_throughputs.append(float(split_list[1]))
+    end_to_end_avg_delays.append(float(split_list[2]))
+    packet_delivery_ratios.append(float(split_list[3]))
+    packet_drop_ratios.append(float(split_list[4]))
 
-stat_file.close()
+out_file.close()
 
 # plotting graphs
+varying_parameter = metrics[0]
+
 plt.plot(parameters, network_throughputs, marker="^", color="b")
-plt.ylabel(metrics[0].replace("-", " "))
-plt.xlabel(parameter.replace("-", " "))
-title = "Network-Throughput_vs_" + parameter.replace("\n", "")
+plt.ylabel("Network Throughput (kbps)")
+plt.xlabel(varying_parameter.replace("-", " "))
 plt.grid()
+title = "network-throughput_vs_" + varying_parameter
 plt.savefig("../graph/" + title + ".jpg")
 plt.clf()
 
 plt.plot(parameters, end_to_end_avg_delays, marker="v", color="g")
-plt.ylabel(metrics[1].replace("-", " "))
-plt.xlabel(parameter.replace("-", " "))
-title = "End-to-End-Avg-Delay_vs_" + parameter.replace("\n", "")
+plt.ylabel("End-to-End Avg Delay (ms)")
+plt.xlabel(varying_parameter.replace("-", " "))
 plt.grid()
+title = "end-to-end-avg-delay_vs_" + varying_parameter
 plt.savefig("../graph/" + title + ".jpg")
 plt.clf()
 
 plt.plot(parameters, packet_delivery_ratios, marker="<", color="r")
-plt.ylabel(metrics[2].replace("-", " "))
-plt.xlabel(parameter.replace("-", " "))
-title = "Packet-Delivery-Ratio_vs_" + parameter.replace("\n", "")
+plt.ylabel("Packet Delivery Ratio")
+plt.xlabel(varying_parameter.replace("-", " "))
 plt.grid()
+title = "packet-delivery-ratio_vs_" + varying_parameter
 plt.savefig("../graph/" + title + ".jpg")
 plt.clf()
 
 plt.plot(parameters, packet_drop_ratios, marker=">", color="y")
-plt.ylabel(metrics[3].replace("-", " "))
-plt.xlabel(parameter.replace("-", " "))
-title = "Packet-Drop-Ratio_vs_" + parameter.replace("\n", "")
+plt.ylabel("Packet Drop Ratio")
+plt.xlabel(varying_parameter.replace("-", " "))
 plt.grid()
+title = "packet-drop-ratio_vs_" + varying_parameter
 plt.savefig("../graph/" + title + ".jpg")
 plt.clf()
