@@ -1405,3 +1405,74 @@ Connection: close
 
 
 
+Request:
+Downloads\TechCriteria.pdf not found
+
+Response:
+HTTP/1.1 405 Method Not Allowed
+Server: Java HTTP Server : 1.0
+Date: Mon Jan 09 23:49:43 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+Only text and image files (.txt, .jpg, .png., .mp4 etc.) are allowed to upload
+
+Response:
+HTTP/1.1 405 Method Not Allowed
+Server: Java HTTP Server : 1.0
+Date: Mon Jan 09 23:50:47 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+D:\3-2\CSE not found
+
+Response:
+HTTP/1.1 405 Method Not Allowed
+Server: Java HTTP Server : 1.0
+Date: Mon Jan 09 23:51:49 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+UPLOAD D:/a.jpg
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Mon Jan 09 23:51:59 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+UPLOADING
+
+Request:
+UPLOAD D:/a.jpg
+
+Response:
+HTTP/1.1 200 OK
+Server: Java HTTP Server : 1.0
+Date: Mon Jan 09 23:52:17 BDT 2023
+Content-type: text/html
+Content-Length: 0
+Connection: close
+
+
+
+Request:
+UPLOADING
+
