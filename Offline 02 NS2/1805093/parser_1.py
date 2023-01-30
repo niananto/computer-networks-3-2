@@ -41,8 +41,11 @@ for line in trace_file:
 trace_file.close()
 
 # writing statistics to stat.st
-stat_file = open("stat.st", "a")
+fout = open("output.csv", "a")
 
-stat_file.write(str((recevied_bytes*8)/((end_time-start_time)*1000))+" "+str(totay_delay/received_packets)+" "+str((received_packets*1.0)/sent_packets*100)+" "+str((dropped_packets*1.0)/sent_packets*100)+"\n")
+fout.write(str((recevied_bytes*8)/((end_time-start_time)*1000))
+          +","+str(totay_delay/received_packets)
+          +","+str((received_packets*1.0)/sent_packets*100)
+          +","+str((dropped_packets*1.0)/sent_packets*100)+"\n")
 
-stat_file.close()
+fout.close()
