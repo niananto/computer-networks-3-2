@@ -1,0 +1,284 @@
+Running for reno
+Simulation starting
+Simulation ending
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+Running for westwood
+Simulation starting
+Simulation ending
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+Running for newreno
+Simulation starting
+Simulation ending
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+Running for areno
+Simulation starting
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+time 0.169258 bwe*min_rtt 0.000000
+time 0.184540 bwe*min_rtt 22.498262
+time 0.189788 bwe*min_rtt 292.026414
+time 0.225239 bwe*min_rtt 0.000000
+time 0.236876 bwe*min_rtt 16.906463
+time 0.240078 bwe*min_rtt 359.438720
+time 0.866571 bwe*min_rtt 0.000000
+time 0.879471 bwe*min_rtt 4.394333
+time 0.891362 bwe*min_rtt 303.551803
+time 0.988304 bwe*min_rtt 0.000000
+time 1.000261 bwe*min_rtt 3.853066
+time 1.003782 bwe*min_rtt 325.821289
+time 1.057201 bwe*min_rtt 0.000000
+time 1.097175 bwe*min_rtt 3.601964
+time 1.149726 bwe*min_rtt 0.000000
+time 1.201497 bwe*min_rtt 0.000000
+time 1.205910 bwe*min_rtt 3.312095
+time 1.214526 bwe*min_rtt 3.169379
+time 1.232946 bwe*min_rtt 298.301204
+time 1.237271 bwe*min_rtt 74.085421
+time 1.258871 bwe*min_rtt 0.000000
+time 1.268444 bwe*min_rtt 3.024933
+time 1.277968 bwe*min_rtt 403.528293
+time 1.425601 bwe*min_rtt 0.000000
+time 1.445876 bwe*min_rtt 2.671154
+time 1.449716 bwe*min_rtt 192.911222
+time 1.518737 bwe*min_rtt 0.000000
+time 1.526391 bwe*min_rtt 2.507346
+time 1.534314 bwe*min_rtt 502.349968
+time 1.552015 bwe*min_rtt 0.000000
+time 1.562995 bwe*min_rtt 2.453585
+time 1.574310 bwe*min_rtt 351.465216
+time 1.597537 bwe*min_rtt 0.000000
+time 1.617643 bwe*min_rtt 0.000000
+time 1.637407 bwe*min_rtt 2.354043
+time 1.640929 bwe*min_rtt 197.149958
+time 1.651945 bwe*min_rtt 0.000000
+time 1.655494 bwe*min_rtt 2.383669
+time 1.669839 bwe*min_rtt 2.305161
+time 1.685506 bwe*min_rtt 217.207525
+time 1.700560 bwe*min_rtt 0.000000
+time 1.709812 bwe*min_rtt 2.239262
+time 1.719335 bwe*min_rtt 415.837768
+time 1.733161 bwe*min_rtt 0.000000
+time 1.741774 bwe*min_rtt 2.197141
+time 1.757953 bwe*min_rtt 446.316443
+time 1.810386 bwe*min_rtt 0.000000
+time 1.824887 bwe*min_rtt 2.103419
+time 1.832115 bwe*min_rtt 0.000000
+time 1.844838 bwe*min_rtt 2.078472
+time 1.851945 bwe*min_rtt 266.611027
+time 1.861735 bwe*min_rtt 303.242815
+time 1.877136 bwe*min_rtt 0.000000
+time 1.885108 bwe*min_rtt 2.028622
+time 1.893350 bwe*min_rtt 481.521552
+time 1.959368 bwe*min_rtt 0.000000
+time 1.980909 bwe*min_rtt 1.943484
+time 1.988512 bwe*min_rtt 180.482181
+time 3.033146 bwe*min_rtt 0.000000
+time 3.054829 bwe*min_rtt 1.255462
+time 3.070909 bwe*min_rtt 0.000000
+time 3.087217 bwe*min_rtt 1.240024
+time 3.090419 bwe*min_rtt 235.856494
+time 3.200001 bwe*min_rtt 1238.945591
+time 3.250611 bwe*min_rtt 1841.895827
+time 3.899974 bwe*min_rtt 890.060382
+time 4.013355 bwe*min_rtt 1694.655735
+time 4.066598 bwe*min_rtt 102.123617
+time 4.069800 bwe*min_rtt 188.936596
+time 4.244235 bwe*min_rtt 768.877321
+time 4.253566 bwe*min_rtt 256.225456
+time 4.287541 bwe*min_rtt 1162.693827
+time 4.459928 bwe*min_rtt 1353.970821
+time 4.543567 bwe*min_rtt 1432.668449
+time 4.583243 bwe*min_rtt 1001.298043
+time 4.609811 bwe*min_rtt 70.244869
+time 4.614612 bwe*min_rtt 130.544190
+time 4.649222 bwe*min_rtt 1452.423632
+time 4.695399 bwe*min_rtt 652.378282
+time 4.726667 bwe*min_rtt 1187.683768
+time 4.765926 bwe*min_rtt 1081.283470
+time 4.863438 bwe*min_rtt 644.537752
+time 4.873676 bwe*min_rtt 798.995167
+time 4.904523 bwe*min_rtt 1375.300659
+time 4.999045 bwe*min_rtt 840.927765
+time 9.023013 bwe*min_rtt 0.000000
+time 9.053111 bwe*min_rtt 0.000000
+time 9.063761 bwe*min_rtt 353.645285
+time 9.070489 bwe*min_rtt 0.422032
+time 9.074970 bwe*min_rtt 81.013145
+time 9.086108 bwe*min_rtt 0.420629
+time 9.099672 bwe*min_rtt 1636.367159
+time 9.210855 bwe*min_rtt 1847.714425
+time 9.260825 bwe*min_rtt 2857.102685
+time 9.910187 bwe*min_rtt 1126.758475
+time 10.023247 bwe*min_rtt 2615.823199
+time 10.078092 bwe*min_rtt 1361.631720
+time 10.252848 bwe*min_rtt 903.607624
+time 10.268949 bwe*min_rtt 354.493147
+time 10.297115 bwe*min_rtt 1453.009478
+time 10.467261 bwe*min_rtt 2217.822991
+time 10.555059 bwe*min_rtt 1778.018784
+time 10.592496 bwe*min_rtt 1243.675494
+time 10.620344 bwe*min_rtt 912.715068
+time 10.656874 bwe*min_rtt 2396.669346
+time 10.704332 bwe*min_rtt 834.525543
+time 10.736561 bwe*min_rtt 1475.666438
+time 10.777419 bwe*min_rtt 1214.872559
+time 10.871731 bwe*min_rtt 725.107906
+timeSimulation ending
+ 10.881969 bwe*min_rtt 949.482673
+time 10.915375 bwe*min_rtt 1707.509607
+time 11.009897 bwe*min_rtt 1262.917350
+Running for westwoodnr
+Simulation starting
+Simulation ending
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+Running for reno
+Simulation starting
+Simulation ending
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+Running for westwood
+Simulation starting
+Simulation ending
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+Running for newreno
+Simulation starting
+Simulation ending
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+Running for areno
+Simulation starting
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+time 0.169258 bwe*min_rtt 0.000000
+time 0.184540 bwe*min_rtt 22.498262
+time 0.189788 bwe*min_rtt 292.026414
+time 0.225239 bwe*min_rtt 0.000000
+time 0.236876 bwe*min_rtt 16.906463
+time 0.240078 bwe*min_rtt 359.438720
+time 0.866571 bwe*min_rtt 0.000000
+time 0.879471 bwe*min_rtt 4.394333
+time 0.891362 bwe*min_rtt 303.551803
+time 0.988304 bwe*min_rtt 0.000000
+time 1.000261 bwe*min_rtt 3.853066
+time 1.003782 bwe*min_rtt 325.821289
+time 1.057201 bwe*min_rtt 0.000000
+time 1.097175 bwe*min_rtt 3.601964
+time 1.149726 bwe*min_rtt 0.000000
+time 1.201497 bwe*min_rtt 0.000000
+time 1.205910 bwe*min_rtt 3.312095
+time 1.214526 bwe*min_rtt 3.169379
+time 1.232946 bwe*min_rtt 298.301204
+time 1.237271 bwe*min_rtt 74.085421
+time 1.258871 bwe*min_rtt 0.000000
+time 1.268444 bwe*min_rtt 3.024933
+time 1.277968 bwe*min_rtt 403.528293
+time 1.425601 bwe*min_rtt 0.000000
+time 1.445876 bwe*min_rtt 2.671154
+time 1.449716 bwe*min_rtt 192.911222
+time 1.518737 bwe*min_rtt 0.000000
+time 1.526391 bwe*min_rtt 2.507346
+time 1.534314 bwe*min_rtt 502.349968
+time 1.552015 bwe*min_rtt 0.000000
+time 1.562995 bwe*min_rtt 2.453585
+time 1.574310 bwe*min_rtt 351.465216
+time 1.597537 bwe*min_rtt 0.000000
+time 1.617643 bwe*min_rtt 0.000000
+time 1.637407 bwe*min_rtt 2.354043
+time 1.640929 bwe*min_rtt 197.149958
+time 1.651945 bwe*min_rtt 0.000000
+time 1.655494 bwe*min_rtt 2.383669
+time 1.669839 bwe*min_rtt 2.305161
+time 1.685506 bwe*min_rtt 217.207525
+time 1.700560 bwe*min_rtt 0.000000
+time 1.709812 bwe*min_rtt 2.239262
+time 1.719335 bwe*min_rtt 415.837768
+time 1.733161 bwe*min_rtt 0.000000
+time 1.741774 bwe*min_rtt 2.197141
+time 1.757953 bwe*min_rtt 446.316443
+time 1.810386 bwe*min_rtt 0.000000
+time 1.824887 bwe*min_rtt 2.103419
+time 1.832115 bwe*min_rtt 0.000000
+time 1.844838 bwe*min_rtt 2.078472
+time 1.851945 bwe*min_rtt 266.611027
+time 1.861735 bwe*min_rtt 303.242815
+time 1.877136 bwe*min_rtt 0.000000
+time 1.885108 bwe*min_rtt 2.028622
+time 1.893350 bwe*min_rtt 481.521552
+time 1.959368 bwe*min_rtt 0.000000
+time 1.980909 bwe*min_rtt 1.943484
+time 1.988512 bwe*min_rtt 180.482181
+time 3.033146 bwe*min_rtt 0.000000
+time 3.054829 bwe*min_rtt 1.255462
+time 3.070909 bwe*min_rtt 0.000000
+time 3.087217 bwe*min_rtt 1.240024
+time 3.090419 bwe*min_rtt 235.856494
+time 3.200001 bwe*min_rtt 1238.945591
+time 3.250611 bwe*min_rtt 1841.895827
+time 3.899974 bwe*min_rtt 890.060382
+time 4.013355 bwe*min_rtt 1694.655735
+time 4.066598 bwe*min_rtt 102.123617
+time 4.069800 bwe*min_rtt 188.936596
+time 4.244235 bwe*min_rtt 768.877321
+time 4.253566 bwe*min_rtt 256.225456
+time 4.287541 bwe*min_rtt 1162.693827
+time 4.459928 bwe*min_rtt 1353.970821
+time 4.543567 bwe*min_rtt 1432.668449
+time 4.583243 bwe*min_rtt 1001.298043
+time 4.609811 bwe*min_rtt 70.244869
+time 4.614612 bwe*min_rtt 130.544190
+time 4.649222 bwe*min_rtt 1452.423632
+time 4.695399 bwe*min_rtt 652.378282
+time 4.726667 bwe*min_rtt 1187.683768
+time 4.765926 bwe*min_rtt 1081.283470
+time 4.863438 bwe*min_rtt 644.537752
+time 4.873676 bwe*min_rtt 798.995167
+time 4.904523 bwe*min_rtt 1375.300659
+time 4.999045 bwe*min_rtt 840.927765
+time 9.023013 bwe*min_rtt 0.000000
+time 9.053111 bwe*min_rtt 0.000000
+time 9.063761 bwe*min_rtt 353.645285
+time 9.070489 bwe*min_rtt 0.422032
+time 9.074970 bwe*min_rtt 81.013145
+time 9.086108 bwe*min_rtt 0.420629
+time 9.099672 bwe*min_rtt 1636.367159
+time 9.210855 bwe*min_rtt 1847.714425
+time 9.260825 bwe*min_rtt 2857.102685
+time 9.910187 bwe*min_rtt 1126.758475
+time 10.023247 bwe*min_rtt 2615.823199
+time 10.078092 bwe*min_rtt 1361.631720
+time 10.252848 bwe*min_rtt 903.607624
+time 10.268949 bwe*min_rtt 354.493147
+time 10.297115 bwe*min_rtt 1453.009478
+time 10.467261 bwe*min_rtt 2217.822991
+time 10.555059 bwe*min_rtt 1778.018784
+time 10.592496 bwe*min_rtt 1243.675494
+time 10.620344 bwe*min_rtt 912.715068
+time 10.656874 bwe*min_rtt 2396.669346
+time 10.704332 bwe*min_rtt 834.525543
+time 10.736561 bwe*min_rtt 1475.666438
+time 10.777419 bwe*min_rtt 1214.872559
+time 10.871731 bwe*min_rtt 725.107906
+timeSimulation ending
+ 10.881969 bwe*min_rtt 949.482673
+time 10.915375 bwe*min_rtt 1707.509607
+time 11.009897 bwe*min_rtt 1262.917350
+Running for westwoodnr
+Simulation starting
+Simulation ending
+num_nodes is set 120
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0

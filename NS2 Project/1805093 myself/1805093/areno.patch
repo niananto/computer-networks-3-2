@@ -1,0 +1,4387 @@
+diff --git a/FILES b/FILES
+index 132bd5b..18d94a9 100644
+--- a/FILES
++++ b/FILES
+@@ -3293,6 +3293,12 @@ tcp/tfrc-sink.cc
+ tcp/tfrc-sink.h
+ tcp/tfrc.cc
+ tcp/tfrc.h
++tcp/tcp-westwood.cc
++tcp/tcp-westwood.h
++tcp/tcp-westwood-nr.cc
++tcp/tcp-westwood-nr.h
++tcp/tcp-areno.cc
++tcp/tcp-areno.h
+ test-all
+ tmix/cvec-orig2alt.pl
+ tmix/tmix.cc
+diff --git a/Makefile b/Makefile
+index f131030..66ab08a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -193,6 +193,8 @@ OBJ_CC = \
+ 	common/messpass.o common/tp.o common/tpm.o apps/worm.o \
+ 	tcp/tcp.o tcp/tcp-sink.o tcp/tcp-reno.o \
+ 	tcp/tcp-newreno.o \
++	tcp/tcp-westwood.o tcp/tcp-westwood-nr.o \
++	tcp/tcp-areno.o \
+ 	tcp/tcp-vegas.o tcp/tcp-rbp.o tcp/tcp-full.o tcp/rq.o \
+ 	baytcp/tcp-full-bay.o baytcp/ftpc.o baytcp/ftps.o \
+ 	tcp/scoreboard.o tcp/scoreboard-rq.o tcp/tcp-sack1.o tcp/tcp-fack.o \
+@@ -549,7 +551,7 @@ dirs:
+ 	done
+ 
+ 
+-install: dirs force install-ns install-man install-recursive
++install: dirs force install-ns install-man
+ 
+ install-ns: force
+ 	$(INSTALL) -m 755 ns $(DESTDIR)$(BINDEST)
+@@ -622,4 +624,4 @@ test:	force
+ # "# !include ..." 	-> 	"!include ..."
+ makefile.vc:	Makefile.in
+ 	$(PERL) bin/gen-vcmake.pl < Makefile.in > makefile.vc
+-#	$(PERL) -pe 's/^# (\!include)/\!include/o' < Makefile.in > makefile.vc
++#	$(PERL) -pe 's/^# (\!include)/\!include/o' < Makefile.in > makefile.vc
+\ No newline at end of file
+diff --git a/Makefile.in b/Makefile.in
+index f53d78a..8313aef 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -193,6 +193,7 @@ OBJ_CC = \
+ 	common/messpass.o common/tp.o common/tpm.o apps/worm.o \
+ 	tcp/tcp.o tcp/tcp-sink.o tcp/tcp-reno.o \
+ 	tcp/tcp-newreno.o \
++  tcp/tcp-westwood.o tcp/tcp-westwood-nr.o \
+ 	tcp/tcp-vegas.o tcp/tcp-rbp.o tcp/tcp-full.o tcp/rq.o \
+ 	baytcp/tcp-full-bay.o baytcp/ftpc.o baytcp/ftps.o \
+ 	tcp/scoreboard.o tcp/scoreboard-rq.o tcp/tcp-sack1.o tcp/tcp-fack.o \
+diff --git a/gen/ns_tcl.cc b/gen/ns_tcl.cc
+index 41d84b2..a790450 100644
+--- a/gen/ns_tcl.cc
++++ b/gen/ns_tcl.cc
+@@ -20129,6 +20129,76 @@ Agent/PBC set modulationScheme 0\n\
+ \n\
+ Agent/MDART set macFailed_ true\n\
+ Agent/MDART set etxMetric_ true\n\
++\n\
++\n\
++Agent/TCP/WestwoodNR set openadd_ 1\n\
++Agent/TCP/WestwoodNR set current_bwe_ 0\n\
++Agent/TCP/WestwoodNR set last_bwe_sample_ 0\n\
++Agent/TCP/WestwoodNR set unaccounted_ 0\n\
++Agent/TCP/WestwoodNR set fr_a_ 1\n\
++Agent/TCP/WestwoodNR set min_rtt_estimate 10000\n\
++Agent/TCP/WestwoodNR set myseqno_ 1\n\
++\n\
++Agent/TCP/WestwoodNR set lastackno_ 0\n\
++Agent/TCP/WestwoodNR set lastackrx_ 0\n\
++Agent/TCP/WestwoodNR set fr_alpha_ 0.9\n\
++Agent/TCP/WestwoodNR set filter_type_ 4\n\
++Agent/TCP/WestwoodNR set tau_ 1.0\n\
++Agent/TCP/WestwoodNR set west_type_ 3.0\n\
++Agent/TCP/WestwoodNR set qest_ 0.0\n\
++Agent/TCP/WestwoodNR set fr_amin_ 0.0\n\
++Agent/TCP/WestwoodNR set fr_amax_ 0.0\n\
++Agent/TCP/WestwoodNR set total_time_ 0.0\n\
++Agent/TCP/WestwoodNR set total_size_ 0.0\n\
++Agent/TCP/WestwoodNR set interp_type_ 0.0\n\
++Agent/TCP/WestwoodNR set fr_prev_ 1.0\n\
++Agent/TCP/WestwoodNR set last_seq_ 0\n\
++Agent/TCP/WestwoodNR set last_echoed_ts_ 0.0\n\
++Agent/TCP/WestwoodNR set last_ts_ 0.0\n\
++Agent/TCP/WestwoodNR set last_cwnd_ 1.0\n\
++\n\
++Agent/TCP/WestwoodNR set current_ts_ 0.0\n\
++Agent/TCP/WestwoodNR set current_echoed_ts_ 0.0\n\
++Agent/TCP/WestwoodNR set newreno_changes_ 0\n\
++Agent/TCP/WestwoodNR set newreno_changes1_ 0\n\
++Agent/TCP/WestwoodNR set partial_window_deflation_ 0\n\
++Agent/TCP/WestwoodNR set exit_recovery_fix_ 0\n\
++\n\
++Agent/TCP/Westwood set current_bwe_ 0\n\
++Agent/TCP/Westwood set last_bwe_sample_ 0\n\
++Agent/TCP/Westwood set unaccounted_ 0\n\
++Agent/TCP/Westwood set fr_a_ 1\n\
++Agent/TCP/Westwood set min_rtt_estimate 10000\n\
++Agent/TCP/Westwood set myseqno_ 1\n\
++\n\
++Agent/TCP/Westwood set lastackno_ 0\n\
++Agent/TCP/Westwood set lastackrx_ 0\n\
++Agent/TCP/Westwood set fr_alpha_ 0.9\n\
++Agent/TCP/Westwood set filter_type_ 3\n\
++Agent/TCP/Westwood set tau_ 1.0\n\
++\n\
++Agent/TCP/AReno set current_bwe_ 0\n\
++Agent/TCP/AReno set last_bwe_sample_ 0\n\
++Agent/TCP/AReno set unaccounted_ 0\n\
++Agent/TCP/AReno set fr_a_ 1\n\
++Agent/TCP/AReno set min_rtt_estimate 10000\n\
++Agent/TCP/AReno set myseqno_ 1\n\
++\n\
++Agent/TCP/AReno set lastackno_ 0\n\
++Agent/TCP/AReno set lastackrx_ 0\n\
++Agent/TCP/AReno set fr_alpha_ 0.9\n\
++Agent/TCP/AReno set filter_type_ 3\n\
++Agent/TCP/AReno set tau_ 1.0\n\
++\n\
++Agent/TCP/AReno set rtt_cong 0\n\
++Agent/TCP/AReno set last_rtt_cong 1\n\
++Agent/TCP/AReno set rtt_factor 0.75\n\
++\n\
++Agent/TCP/AReno set cwnd_base 0\n\
++Agent/TCP/AReno set cwnd_probe 0\n\
++Agent/TCP/AReno set cwnd_inc 0\n\
++\n\
++Agent/TCP/AReno set max_seg_size 1460\n\
+ if [TclObject is-class Network/Pcap/Live] {\n\
+ Network/Pcap/Live set snaplen_ 4096;# bpf snap len\n\
+ Network/Pcap/Live set promisc_ false;\n\
+diff --git a/gen/ns_tcl.o b/gen/ns_tcl.o
+index 1d5218a..602db6a 100644
+Binary files a/gen/ns_tcl.o and b/gen/ns_tcl.o differ
+diff --git a/ns b/ns
+index 3134eed..c3d1e31 100755
+Binary files a/ns and b/ns differ
+diff --git a/nstk b/nstk
+index 4b87ccd..ee608f7 100755
+Binary files a/nstk and b/nstk differ
+diff --git a/tcl/lib/ns-compat.tcl b/tcl/lib/ns-compat.tcl
+index a0b6801..1f50c93 100644
+--- a/tcl/lib/ns-compat.tcl
++++ b/tcl/lib/ns-compat.tcl
+@@ -634,6 +634,7 @@ OldSim instproc init args {
+ 	set classMap_(tcp-fack) Agent/TCP/Fack
+ 	set classMap_(facktcp) Agent/TCP/Fack
+ 	set classMap_(tcp-newreno) Agent/TCP/Newreno
++	# set classMap_(tcp-adaptivereno) Agent/TCP/Areno
+ 	set classMap_(tcpnewreno) Agent/TCP/Newreno
+ 	set classMap_(cbr) Agent/CBR
+ 	set classMap_(tcp-sink) Agent/TCPSink
+diff --git a/tcl/lib/ns-default.tcl b/tcl/lib/ns-default.tcl
+index 56ee34f..e328307 100644
+--- a/tcl/lib/ns-default.tcl
++++ b/tcl/lib/ns-default.tcl
+@@ -1590,3 +1590,77 @@ Agent/PBC set modulationScheme 0
+ 
+ Agent/MDART set macFailed_ true
+ Agent/MDART set etxMetric_ true
++
++# Added for TCP WestwoodNR
++
++Agent/TCP/WestwoodNR set openadd_ 1
++Agent/TCP/WestwoodNR set current_bwe_ 0
++Agent/TCP/WestwoodNR set last_bwe_sample_ 0
++Agent/TCP/WestwoodNR set unaccounted_ 0
++Agent/TCP/WestwoodNR set fr_a_ 1
++Agent/TCP/WestwoodNR set min_rtt_estimate 10000
++Agent/TCP/WestwoodNR set myseqno_ 1
++
++Agent/TCP/WestwoodNR set lastackno_ 0
++Agent/TCP/WestwoodNR set lastackrx_ 0
++Agent/TCP/WestwoodNR set fr_alpha_ 0.9
++Agent/TCP/WestwoodNR set filter_type_ 4
++Agent/TCP/WestwoodNR set tau_ 1.0
++Agent/TCP/WestwoodNR set west_type_ 3.0
++Agent/TCP/WestwoodNR set qest_ 0.0
++Agent/TCP/WestwoodNR set fr_amin_ 0.0
++Agent/TCP/WestwoodNR set fr_amax_ 0.0
++Agent/TCP/WestwoodNR set total_time_ 0.0
++Agent/TCP/WestwoodNR set total_size_ 0.0
++Agent/TCP/WestwoodNR set interp_type_ 0.0
++Agent/TCP/WestwoodNR set fr_prev_ 1.0
++Agent/TCP/WestwoodNR set last_seq_ 0
++Agent/TCP/WestwoodNR set last_echoed_ts_ 0.0
++Agent/TCP/WestwoodNR set last_ts_ 0.0
++Agent/TCP/WestwoodNR set last_cwnd_ 1.0
++
++Agent/TCP/WestwoodNR set current_ts_ 0.0
++Agent/TCP/WestwoodNR set current_echoed_ts_ 0.0
++Agent/TCP/WestwoodNR set newreno_changes_ 0
++Agent/TCP/WestwoodNR set newreno_changes1_ 0
++Agent/TCP/WestwoodNR set partial_window_deflation_ 0
++Agent/TCP/WestwoodNR set exit_recovery_fix_ 0
++
++# Added for TCP Westwood
++Agent/TCP/Westwood set current_bwe_ 0
++Agent/TCP/Westwood set last_bwe_sample_ 0
++Agent/TCP/Westwood set unaccounted_ 0
++Agent/TCP/Westwood set fr_a_ 1
++Agent/TCP/Westwood set min_rtt_estimate 10000
++Agent/TCP/Westwood set myseqno_ 1
++
++Agent/TCP/Westwood set lastackno_ 0
++Agent/TCP/Westwood set lastackrx_ 0
++Agent/TCP/Westwood set fr_alpha_ 0.9
++Agent/TCP/Westwood set filter_type_ 3
++Agent/TCP/Westwood set tau_ 1.0
++
++# Added for TCP AReno
++# Agent/TCP/AReno set mss_ 1000
++Agent/TCP/AReno set current_bwe_ 0
++Agent/TCP/AReno set last_bwe_sample_ 0
++Agent/TCP/AReno set unaccounted_ 0
++Agent/TCP/AReno set fr_a_ 1
++Agent/TCP/AReno set min_rtt_estimate 10000
++Agent/TCP/AReno set myseqno_ 1
++
++Agent/TCP/AReno set lastackno_ 0
++Agent/TCP/AReno set lastackrx_ 0
++Agent/TCP/AReno set fr_alpha_ 0.9
++Agent/TCP/AReno set filter_type_ 3
++Agent/TCP/AReno set tau_ 1.0
++
++Agent/TCP/AReno set rtt_cong 0
++Agent/TCP/AReno set last_rtt_cong 1
++Agent/TCP/AReno set rtt_factor 0.75
++
++Agent/TCP/AReno set cwnd_base 0
++Agent/TCP/AReno set cwnd_probe 0
++Agent/TCP/AReno set cwnd_inc 0
++
++Agent/TCP/AReno set max_seg_size 1460
+\ No newline at end of file
+diff --git a/tcp/linux/src/tcp_westwood.c b/tcp/linux/src/tcp_westwood.c
+index 8275a6d..0bbfdc8 100644
+--- a/tcp/linux/src/tcp_westwood.c
++++ b/tcp/linux/src/tcp_westwood.c
+@@ -25,26 +25,52 @@
+  * ssthresh after packet loss. The probing phase is as the original Reno.
+  */
+ 
++/*
++bw_ns_est: Estimated bandwidth based on the last delta time window, where delta is the time since the start of the last RTT window. This is the raw value before being filtered.
++bw_est: Estimated bandwidth after applying a low-pass filter to the raw bw_ns_est value.
++rtt_win_sx: The timestamp of the start of the current RTT window.
++bk: The number of bytes acknowledged in the current RTT window.
++snd_una: The oldest unacknowledged sequence number in the send buffer. Used for evaluating the number of acknowledged bytes.
++cumul_ack: The cumulative number of bytes acknowledged since the start of the connection.
++accounted: The number of bytes that have been accounted for in the current RTT window.
++rtt: The current RTT estimate in clock ticks.
++rtt_min: The minimum observed RTT so far.
++first_ack: A flag that is set to 1 on the first ACK, indicating that the snd_una value needs to be initialized.
++reset_rtt_min: A flag that is set to 1 if the minimum observed RTT needs to be reset to the next RTT sample.
++TCP_WESTWOOD_RTT_MIN: A constant that represents the minimum value for an RTT in clock ticks. This is used to filter out RTT samples that are too small to be useful.
++TCP_WESTWOOD_INIT_RTT: A constant that represents the initial RTT estimate for new connections. This value is set to be conservative since there is no information about the network conditions at the start of a connection.
++delta: The time since the start of the current RTT window, in clock ticks.
++last: The timestamp of the last ACK, which is not used in the code.
++*/
+ 
+ /* TCP Westwood structure */
+-struct westwood {
+-	u32    bw_ns_est;        /* first bandwidth estimation..not too smoothed 8) */
+-	u32    bw_est;           /* bandwidth estimate */
+-	u32    rtt_win_sx;       /* here starts a new evaluation... */
+-	u32    bk;
+-	u32    snd_una;          /* used for evaluating the number of acked bytes */
+-	u32    cumul_ack;
+-	u32    accounted;
+-	u32    rtt;
+-	u32    rtt_min;          /* minimum observed RTT */
+-	u8     first_ack;        /* flag which infers that this is the first ack */
+-	u8     reset_rtt_min;    /* Reset RTT min to next RTT sample*/
++struct westwood
++{
++  u32 bw_ns_est;  /* first bandwidth estimation..not too smoothed 8) */
++  u32 bw_est;     /* bandwidth estimate */
++  u32 rtt_win_sx; /* here starts a new evaluation... */
++  u32 bk;
++  u32 snd_una; /* used for evaluating the number of acked bytes */
++  u32 cumul_ack;
++  u32 accounted;
++  u32 rtt;
++  u32 rtt_min;      /* minimum observed RTT */
++  u8 first_ack;     /* flag which infers that this is the first ack */
++  u8 reset_rtt_min; /* Reset RTT min to next RTT sample*/
++
++  // u32 m_minRtt_;      /* minimum Rtt over the whole simulation */
++  // u32 m_currentRtt_;  /* current Rtt value for a packet ACK event */
++  // u32 m_jPacketLRtt_; /* Rtt for j-th packet loss event */
++  // u32 m_conjRtt_;     /* congestion Rtt for j-th packet loss event */
++  // u32 m_prevConjRtt_; /* congestion Rtt for (j-1)-th packet loss event */
++  // u32 m_incWnd_;      /* increase of window for the window probe part */
++  // u32 m_baseWnd_;     /* base part of the calculated congestion window */
++  // u32 m_probeWnd_;    /* probe part of the calculated congestion window */
+ };
+ 
+-
+ /* TCP Westwood functions and constants */
+-#define TCP_WESTWOOD_RTT_MIN   (HZ/20)	/* 50ms */
+-#define TCP_WESTWOOD_INIT_RTT  (20*HZ)	/* maybe too conservative?! */
++#define TCP_WESTWOOD_RTT_MIN (HZ / 20)  /* 50ms */
++#define TCP_WESTWOOD_INIT_RTT (20 * HZ) /* maybe too conservative?! */
+ 
+ /*
+  * @tcp_westwood_create
+@@ -59,39 +85,78 @@ struct westwood {
+  */
+ static void tcp_westwood_init(struct sock *sk)
+ {
+-	struct westwood *w = inet_csk_ca(sk);
+-
+-	w->bk = 0;
+-	w->bw_ns_est = 0;
+-	w->bw_est = 0;
+-	w->accounted = 0;
+-	w->cumul_ack = 0;
+-	w->reset_rtt_min = 1;
+-	w->rtt_min = w->rtt = TCP_WESTWOOD_INIT_RTT;
+-	w->rtt_win_sx = tcp_time_stamp;
+-	w->snd_una = tcp_sk(sk)->snd_una;
+-	w->first_ack = 1;
++  struct westwood *w = inet_csk_ca(sk);
++
++  w->bk = 0;
++  w->bw_ns_est = 0;
++  w->bw_est = 0;
++  w->accounted = 0;
++  w->cumul_ack = 0;
++  w->reset_rtt_min = 1;
++  w->rtt_min = w->rtt = TCP_WESTWOOD_INIT_RTT;
++  w->rtt_win_sx = tcp_time_stamp;
++  w->snd_una = tcp_sk(sk)->snd_una;
++  w->first_ack = 1;
++
++  // w->m_minRtt_ = 0.0;
++  // w->m_currentRtt_ = 0.0;
++  // w->m_jPacketLRtt_ = 0.0;
++  // w->m_conjRtt_ = 0.0;
++  // w->m_prevConjRtt_ = 0.0;
++  // w->m_incWnd_ = 0;
++  // w->m_baseWnd_ = 0;
++  // w->m_probeWnd_ = 0;
++
++  // printf("TCP Westwood+ initialized\n");
+ }
+ 
++// double estimate_congestion_level(struct westwood *w)
++// {
++//   /*
++
++//       VARIABLE m_a = EXPONENTIAL SMOOTHING FACTOR
++//       m_maxRTT = (1-m_a)*m_prevMaxRtt + m_a*m_maxRTT
++
++//       RETURN:
++//       congestion_level = min((
++//           (m_currentRtt - m_minRtt) / (m_maxRTT - m_minRtt)
++//       ), 1)
++
++//   */
++
++//   float m_a = 0.85; // exponential smoothing factor
++//   if (w->m_prevConjRtt < w->m_minRtt)
++//     m_a = 0; // the initial value should take the full current Jth loss Rtt
++
++//   u32 conjRtt = m_a * w->m_prevConjRtt + (1 - m_a) * w->m_jPacketLRtt;
++//   w->m_conjRtt = conjRtt; // for next step calcu
++//   NS_LOG_LOGIC("conj rtt : " << w->m_conjRtt << " ; m_prevConjRtt : " << w->m_prevConjRtt << " ; j rtt : " << w->m_jPacketLRtt);
++
++//   return min((w->m_currentRtt - w->m_minRtt) / (conjRtt - w->m_minRtt), 1.0);
++// }
++
+ /*
+  * @westwood_do_filter
+  * Low-pass filter. Implemented using constant coefficients.
+  */
+ static inline u32 westwood_do_filter(u32 a, u32 b)
+ {
+-	return (((7 * a) + b) >> 3);
++  return (((7 * a) + b) >> 3);
+ }
+ 
+ static void westwood_filter(struct westwood *w, u32 delta)
+ {
+-	/* If the filter is empty fill it with the first sample of bandwidth  */
+-	if (w->bw_ns_est == 0 && w->bw_est == 0) {
+-		w->bw_ns_est = w->bk / delta;
+-		w->bw_est = w->bw_ns_est;
+-	} else {
+-		w->bw_ns_est = westwood_do_filter(w->bw_ns_est, w->bk / delta);
+-		w->bw_est = westwood_do_filter(w->bw_est, w->bw_ns_est);
+-	}
++  /* If the filter is empty fill it with the first sample of bandwidth  */
++  if (w->bw_ns_est == 0 && w->bw_est == 0)
++  {
++    w->bw_ns_est = w->bk / delta;
++    w->bw_est = w->bw_ns_est;
++  }
++  else
++  {
++    w->bw_ns_est = westwood_do_filter(w->bw_ns_est, w->bk / delta);
++    w->bw_est = westwood_do_filter(w->bw_est, w->bw_ns_est);
++  }
+ }
+ 
+ /*
+@@ -101,11 +166,11 @@ static void westwood_filter(struct westwood *w, u32 delta)
+  */
+ static void tcp_westwood_pkts_acked(struct sock *sk, u32 cnt, ktime_t last)
+ {
+-	last = last;
++  last = last;
+ 
+-	struct westwood *w = inet_csk_ca(sk);
+-	if (cnt > 0)
+-		w->rtt = tcp_sk(sk)->srtt >> 3;
++  struct westwood *w = inet_csk_ca(sk);
++  if (cnt > 0)
++    w->rtt = tcp_sk(sk)->srtt >> 3;
+ }
+ 
+ /*
+@@ -115,45 +180,48 @@ static void tcp_westwood_pkts_acked(struct sock *sk, u32 cnt, ktime_t last)
+  */
+ static void westwood_update_window(struct sock *sk)
+ {
+-	struct westwood *w = inet_csk_ca(sk);
+-	s32 delta = tcp_time_stamp - w->rtt_win_sx;
+-
+-	/* Initialize w->snd_una with the first acked sequence number in order
+-	 * to fix mismatch between tp->snd_una and w->snd_una for the first
+-	 * bandwidth sample
+-	 */
+-	if (w->first_ack) {
+-		w->snd_una = tcp_sk(sk)->snd_una;
+-		w->first_ack = 0;
+-	}
+-
+-	/*
+-	 * See if a RTT-window has passed.
+-	 * Be careful since if RTT is less than
+-	 * 50ms we don't filter but we continue 'building the sample'.
+-	 * This minimum limit was chosen since an estimation on small
+-	 * time intervals is better to avoid...
+-	 * Obviously on a LAN we reasonably will always have
+-	 * right_bound = left_bound + WESTWOOD_RTT_MIN
+-	 */
+-	if (w->rtt && delta > max_t(u32, w->rtt, TCP_WESTWOOD_RTT_MIN)) {
+-		westwood_filter(w, delta);
+-
+-		w->bk = 0;
+-		w->rtt_win_sx = tcp_time_stamp;
+-	}
++  struct westwood *w = inet_csk_ca(sk);
++  s32 delta = tcp_time_stamp - w->rtt_win_sx;
++
++  /* Initialize w->snd_una with the first acked sequence number in order
++   * to fix mismatch between tp->snd_una and w->snd_una for the first
++   * bandwidth sample
++   */
++  if (w->first_ack)
++  {
++    w->snd_una = tcp_sk(sk)->snd_una;
++    w->first_ack = 0;
++  }
++
++  /*
++   * See if a RTT-window has passed.
++   * Be careful since if RTT is less than
++   * 50ms we don't filter but we continue 'building the sample'.
++   * This minimum limit was chosen since an estimation on small
++   * time intervals is better to avoid...
++   * Obviously on a LAN we reasonably will always have
++   * right_bound = left_bound + WESTWOOD_RTT_MIN
++   */
++  if (w->rtt && delta > max_t(u32, w->rtt, TCP_WESTWOOD_RTT_MIN))
++  {
++    westwood_filter(w, delta);
++
++    w->bk = 0;
++    w->rtt_win_sx = tcp_time_stamp;
++  }
+ }
+ 
+ static inline void update_rtt_min(struct westwood *w)
+ {
+-	if (w->reset_rtt_min) {
+-		w->rtt_min = w->rtt;
+-		w->reset_rtt_min = 0;
+-	} else
+-		w->rtt_min = min(w->rtt, w->rtt_min);
++  if (w->reset_rtt_min)
++  {
++    w->rtt_min = w->rtt;
++    w->reset_rtt_min = 0;
++  }
++  else
++    w->rtt_min = min(w->rtt, w->rtt_min);
+ }
+ 
+-
+ /*
+  * @westwood_fast_bw
+  * It is called when we are in fast path. In particular it is called when
+@@ -162,14 +230,14 @@ static inline void update_rtt_min(struct westwood *w)
+  */
+ static inline void westwood_fast_bw(struct sock *sk)
+ {
+-	const struct tcp_sock *tp = tcp_sk(sk);
+-	struct westwood *w = inet_csk_ca(sk);
++  const struct tcp_sock *tp = tcp_sk(sk);
++  struct westwood *w = inet_csk_ca(sk);
+ 
+-	westwood_update_window(sk);
++  westwood_update_window(sk);
+ 
+-	w->bk += tp->snd_una - w->snd_una;
+-	w->snd_una = tp->snd_una;
+-	update_rtt_min(w);
++  w->bk += tp->snd_una - w->snd_una;
++  w->snd_una = tp->snd_una;
++  update_rtt_min(w);
+ }
+ 
+ /*
+@@ -179,36 +247,40 @@ static inline void westwood_fast_bw(struct sock *sk)
+  */
+ static inline u32 westwood_acked_count(struct sock *sk)
+ {
+-	const struct tcp_sock *tp = tcp_sk(sk);
+-	struct westwood *w = inet_csk_ca(sk);
+-
+-	w->cumul_ack = tp->snd_una - w->snd_una;
+-
+-	/* If cumul_ack is 0 this is a dupack since it's not moving
+-	 * tp->snd_una.
+-	 */
+-	if (!w->cumul_ack) {
+-		w->accounted += tp->mss_cache;
+-		w->cumul_ack = tp->mss_cache;
+-	}
+-
+-	if (w->cumul_ack > tp->mss_cache) {
+-		/* Partial or delayed ack */
+-		if (w->accounted >= w->cumul_ack) {
+-			w->accounted -= w->cumul_ack;
+-			w->cumul_ack = tp->mss_cache;
+-		} else {
+-			w->cumul_ack -= w->accounted;
+-			w->accounted = 0;
+-		}
+-	}
+-
+-	w->snd_una = tp->snd_una;
+-
+-	return w->cumul_ack;
++  const struct tcp_sock *tp = tcp_sk(sk);
++  struct westwood *w = inet_csk_ca(sk);
++
++  w->cumul_ack = tp->snd_una - w->snd_una;
++
++  /* If cumul_ack is 0 this is a dupack since it's not moving
++   * tp->snd_una.
++   */
++  if (!w->cumul_ack)
++  {
++    w->accounted += tp->mss_cache;
++    w->cumul_ack = tp->mss_cache;
++  }
++
++  if (w->cumul_ack > tp->mss_cache)
++  {
++    /* Partial or delayed ack */
++    if (w->accounted >= w->cumul_ack)
++    {
++      w->accounted -= w->cumul_ack;
++      w->cumul_ack = tp->mss_cache;
++    }
++    else
++    {
++      w->cumul_ack -= w->accounted;
++      w->accounted = 0;
++    }
++  }
++
++  w->snd_una = tp->snd_una;
++
++  return w->cumul_ack;
+ }
+ 
+-
+ /*
+  * TCP Westwood
+  * Here limit is evaluated as Bw estimation*RTTmin (for obtaining it
+@@ -217,88 +289,86 @@ static inline u32 westwood_acked_count(struct sock *sk)
+  */
+ static u32 tcp_westwood_bw_rttmin(const struct sock *sk)
+ {
+-	const struct tcp_sock *tp = tcp_sk(sk);
+-	const struct westwood *w = inet_csk_ca(sk);
+-	return max_t(u32, (w->bw_est * w->rtt_min) / tp->mss_cache, 2);
++  const struct tcp_sock *tp = tcp_sk(sk);
++  const struct westwood *w = inet_csk_ca(sk);
++  return max_t(u32, (w->bw_est * w->rtt_min) / tp->mss_cache, 2);
+ }
+ 
+ static void tcp_westwood_event(struct sock *sk, enum tcp_ca_event event)
+ {
+-	struct tcp_sock *tp = tcp_sk(sk);
+-	struct westwood *w = inet_csk_ca(sk);
+-
+-	switch (event) {
+-	case CA_EVENT_FAST_ACK:
+-		westwood_fast_bw(sk);
+-		break;
+-
+-	case CA_EVENT_COMPLETE_CWR:
+-		tp->snd_cwnd = tp->snd_ssthresh = tcp_westwood_bw_rttmin(sk);
+-		break;
+-
+-	case CA_EVENT_FRTO:
+-		tp->snd_ssthresh = tcp_westwood_bw_rttmin(sk);
+-		/* Update RTT_min when next ack arrives */
+-		w->reset_rtt_min = 1;
+-		break;
+-
+-	case CA_EVENT_SLOW_ACK:
+-		westwood_update_window(sk);
+-		w->bk += westwood_acked_count(sk);
+-		update_rtt_min(w);
+-		break;
+-
+-	default:
+-		/* don't care */
+-		break;
+-	}
++  struct tcp_sock *tp = tcp_sk(sk);
++  struct westwood *w = inet_csk_ca(sk);
++
++  switch (event)
++  {
++  case CA_EVENT_FAST_ACK:
++    westwood_fast_bw(sk);
++    break;
++
++  case CA_EVENT_COMPLETE_CWR:
++    tp->snd_cwnd = tp->snd_ssthresh = tcp_westwood_bw_rttmin(sk);
++    break;
++
++  case CA_EVENT_FRTO:
++    tp->snd_ssthresh = tcp_westwood_bw_rttmin(sk);
++    /* Update RTT_min when next ack arrives */
++    w->reset_rtt_min = 1;
++    break;
++
++  case CA_EVENT_SLOW_ACK:
++    westwood_update_window(sk);
++    w->bk += westwood_acked_count(sk);
++    update_rtt_min(w);
++    break;
++
++  default:
++    /* don't care */
++    break;
++  }
+ }
+ 
+-
+ /* Extract info for Tcp socket info provided via netlink. */
+ static void tcp_westwood_info(struct sock *sk, u32 ext,
+-			      struct sk_buff *skb)
++                              struct sk_buff *skb)
+ {
+-	sk = sk;
+-	ext = ext;
+-	skb = skb;
+-
+-/*	const struct westwood *ca = inet_csk_ca(sk);
+-	if (ext & (1 << (INET_DIAG_VEGASINFO - 1))) {
+-		struct tcpvegas_info info = {
+-			.tcpv_enabled = 1,
+-			.tcpv_rtt = jiffies_to_usecs(ca->rtt),
+-			.tcpv_minrtt = jiffies_to_usecs(ca->rtt_min),
+-		};
+-
+-		nla_put(skb, INET_DIAG_VEGASINFO, sizeof(info), &info);
+-	}
+-*/
++  sk = sk;
++  ext = ext;
++  skb = skb;
++
++  /*	const struct westwood *ca = inet_csk_ca(sk);
++    if (ext & (1 << (INET_DIAG_VEGASINFO - 1))) {
++      struct tcpvegas_info info = {
++        .tcpv_enabled = 1,
++        .tcpv_rtt = jiffies_to_usecs(ca->rtt),
++        .tcpv_minrtt = jiffies_to_usecs(ca->rtt_min),
++      };
++
++      nla_put(skb, INET_DIAG_VEGASINFO, sizeof(info), &info);
++    }
++  */
+ }
+ 
+-
+ static struct tcp_congestion_ops tcp_westwood = {
+-	.init		= tcp_westwood_init,
+-	.ssthresh	= tcp_reno_ssthresh,
+-	.cong_avoid	= tcp_reno_cong_avoid,
+-	.min_cwnd	= tcp_westwood_bw_rttmin,
+-	.cwnd_event	= tcp_westwood_event,
+-	.get_info	= tcp_westwood_info,
+-	.pkts_acked	= tcp_westwood_pkts_acked,
+-
+-	.owner		= THIS_MODULE,
+-	.name		= "westwood"
+-};
++    .init = tcp_westwood_init,
++    .ssthresh = tcp_reno_ssthresh,
++    .cong_avoid = tcp_reno_cong_avoid,
++    .min_cwnd = tcp_westwood_bw_rttmin,
++    .cwnd_event = tcp_westwood_event,
++    .get_info = tcp_westwood_info,
++    .pkts_acked = tcp_westwood_pkts_acked,
++
++    .owner = THIS_MODULE,
++    .name = "westwood"};
+ 
+ static int __init tcp_westwood_register(void)
+ {
+-	BUILD_BUG_ON(sizeof(struct westwood) > ICSK_CA_PRIV_SIZE);
+-	return tcp_register_congestion_control(&tcp_westwood);
++  BUILD_BUG_ON(sizeof(struct westwood) > ICSK_CA_PRIV_SIZE);
++  return tcp_register_congestion_control(&tcp_westwood);
+ }
+ 
+ static void __exit tcp_westwood_unregister(void)
+ {
+-	tcp_unregister_congestion_control(&tcp_westwood);
++  tcp_unregister_congestion_control(&tcp_westwood);
+ }
+ 
+ module_init(tcp_westwood_register);
+@@ -308,3 +378,37 @@ MODULE_AUTHOR("Stephen Hemminger, Angelo Dell'Aera");
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("TCP Westwood+");
+ #undef NS_PROTOCOL
++
++/*
++tcp_westwood_init: This function initializes the fields used in TCP Westwood+ when a new TCP connection is established.
++It sets default values for bandwidth estimation, RTT measurements, and other related parameters.
++
++westwood_do_filter and westwood_filter: These functions implement a low-pass filter to smooth out the variations in the
++estimated bandwidth over time. They take a weighted average of the current bandwidth estimation and the new sample.
++
++tcp_westwood_pkts_acked: This function is called when a group of packets is acknowledged by the receiver. It updates the
++RTT measurement by dividing the smoothed round-trip time (SRTT) by 8.
++
++westwood_update_window: This function updates the RTT evaluation window and calls the filter function to evaluate the bandwidth.
++It first initializes w->snd_una with the first acknowledged sequence number to ensure a consistent sample of the transmitted data.
++Then, it calculates the time since the last RTT measurement and checks if a RTT window has passed. If so, it updates the RTT window and
++calculates the new bandwidth estimation.
++*/
++
++/*
++CA_EVENT_FAST_ACK: This case is triggered when the TCP stack receives a fast acknowledgment, which is an acknowledgment that arrives
++before the TCP stack expects it. In this case, the westwood_fast_bw() function is called to update the sending rate to account for the new acknowledgment.
++
++CA_EVENT_COMPLETE_CWR: This case is triggered when the TCP stack exits congestion window reduction
++(CWR) mode. In this case, the sending congestion window (snd_cwnd) and slow start threshold (snd_ssthresh) are set to the
++minimum of the current sending rate and the minimum round-trip time (RTT) that has been measured during the connection, which is calculated by calling tcp_westwood_bw_rttmin().
++
++CA_EVENT_FRTO: This case is triggered when the TCP stack performs a forward retransmission timeout (FRTO)
++recovery. In this case, the slow start threshold (snd_ssthresh) is set to the minimum RTT that has been measured during
++the connection, and the reset_rtt_min flag is set to true to indicate that the minimum RTT value needs to be updated when the next acknowledgment arrives.
++
++CA_EVENT_SLOW_ACK: This case is triggered when the TCP stack receives a slow acknowledgment, which is an
++acknowledgment that arrives later than expected. In this case, the westwood_update_window() function is
++called to update the congestion window size, and the number of packets that have been acknowledged since the last
++slow acknowledgment is added to the bk variable. The update_rtt_min() function is also called to update the minimum RTT value.
++*/
+\ No newline at end of file
+diff --git a/tcp/tcp-areno.cc b/tcp/tcp-areno.cc
+new file mode 100644
+index 0000000..26c7e79
+--- /dev/null
++++ b/tcp/tcp-areno.cc
+@@ -0,0 +1,726 @@
++/* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */
++/*
++ * Copyright (c) 1990, 2001 Regents of the University of California.
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms are permitted
++ * provided that the above copyright notice and this paragraph are
++ * duplicated in all such forms and that any documentation,
++ * advertising materials, and other materials related to such
++ * distribution and use acknowledge that the software was developed
++ * by the University of California, Lawrence Berkeley Laboratory,
++ * Berkeley, CA.  The name of the University may not be used to
++ * endorse or promote products derived from this software without
++ * specific prior written permission.
++ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
++ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
++ * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
++ */
++
++// TCPW-NR - TCPW AReno with NewReno Features
++//
++// tcp-areno.cc - v1.3 - 2002/06/21 - mvalla
++//
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/types.h>
++#include <math.h>
++
++#include "packet.h"
++#include "ip.h"
++#include "tcp.h"
++#include "flags.h"
++#include "address.h"
++
++#include "tcp-areno.h"
++#define DEBUG 0
++#define PDEBUG 0
++
++static class ARenoTcpClass : public TclClass
++{
++public:
++  ARenoTcpClass() : TclClass("Agent/TCP/AReno") {}
++  TclObject *create(int, const char *const *)
++  {
++    return (new ARenoTcpAgent());
++  }
++} class_areno;
++
++ARenoTcpAgent::ARenoTcpAgent() : RenoTcpAgent(),
++                                 // these where originally in TcpAgent()
++                                 current_bwe_(0), last_bwe_sample_(0), unaccounted_(0),
++                                 fr_a_(0), min_rtt_estimate(5.0), myseqno_(1),
++
++                                 lastackrx_(0.0), fr_alpha_(0.9), filter_type_(1), tau_(1.0)
++{
++  // check if it has been called
++  if (DEBUG)
++    printf("ARenoTcpAgent() called!\n");
++
++  // (these where originally in TcpAgent() )
++  // Read defaults variables from ns-defaults.tcl
++  // bind("mss_", &mss_);
++  bind("current_bwe_", &current_bwe_);
++  bind("last_bwe_sample_", &last_bwe_sample_);
++  bind("unaccounted_", &unaccounted_);
++  bind("fr_a_", &fr_a_);
++  bind("min_rtt_estimate", &min_rtt_estimate);
++
++  bind("fr_alpha_", &fr_alpha_);
++  bind("filter_type_", &filter_type_);
++  bind("tau_", &tau_);
++
++  bind("rtt_cong", &rtt_cong);
++  bind("last_rtt_cong", &last_rtt_cong);
++  bind("rtt_factor", &rtt_factor);
++
++  bind("cwnd_base", &cwnd_base);
++  bind("cwnd_probe", &cwnd_probe);
++  bind("cwnd_inc", &cwnd_inc);
++
++  bind("max_seg_size", &max_seg_size);
++}
++
++void ARenoTcpAgent::dupack_action()
++{
++  // check if it has been called
++  if (DEBUG)
++    printf("dupack_action() called!\n");
++
++  // update the rtt cong
++  double rtt_estimate = t_rtt_ * tcp_tick_;
++  rtt_cong = (1 - rtt_factor) * last_rtt_cong + rtt_factor * rtt_estimate;
++
++  /* New adaptive BWE/a strategy */
++  if (ssthresh_ > cwnd_)
++  {
++    /* 3dupacks were received while I was in slowstart */
++    fr_a_ += 0.25;
++    if (fr_a_ > 4)
++      fr_a_ = 4;
++  }
++  else
++  {
++    /* 3dupacks were received while I was in congestion avoidance */
++    fr_a_ = 1;
++  }
++
++  //
++  //  ssthresh_ = (int)((current_bwe_/size_/8) * min_rtt_estimate)/fr_a_;
++  //
++
++  // WARNING!!!'a' is no longer being used
++  ssthresh_ = (int)((current_bwe_ / size_ / 8) * min_rtt_estimate);
++
++  // Safety Check: ssthresh should not be < 2
++  // added 2002-05-20 by MV
++  if (ssthresh_ < 2)
++  {
++    ssthresh_ = 2;
++  }
++
++  /* our algorithm dictates that CWIN=ssthresh after a 3DUPACK, but */
++  /* we should not forcefully increase CWIN if it is smaller than   */
++  /* ssthresh                                                       */
++
++  if (cwnd_ > ssthresh_)
++  {
++    cwnd_ = ssthresh_;
++  }
++
++  recover_ = maxseq_;                       // used by ECN
++  last_cwnd_action_ = CWND_ACTION_DUPACK;   // used by ECN
++  reset_rtx_timer(1, 0);                    // reset RTO as in Reno
++  output(last_ack_ + 1, TCP_REASON_DUPACK); // resend missing packet
++  return;
++}
++
++void ARenoTcpAgent::timeout(int tno)
++{
++  // check if it has been called
++  if (DEBUG)
++    printf("timeout() called!\n");
++
++  /* retransmit timer */
++  if (tno == TCP_TIMER_RTX)
++  {
++    // These three lines catch the RenoTcpAgent::timeout() behavior
++    dupwnd_ = 0;
++    dupacks_ = 0;
++    if (bug_fix_)
++      recover_ = maxseq_;
++
++    // There has been a timeout - will trace this event
++    trace_event("TIMEOUT");
++
++    if (cwnd_ < 1)
++      cwnd_ = 1;
++    if (highest_ack_ == maxseq_ && !slow_start_restart_)
++    {
++      /*
++       * TCP option:
++       * If no outstanding data, then don't do anything.
++       */
++      // Should this return be here?
++      // What if CWND_ACTION_ECN and cwnd < 1?
++      // return;
++    }
++    else
++    {
++      recover_ = maxseq_;
++      if (highest_ack_ == -1 && wnd_init_option_ == 2)
++        /*
++         * First packet dropped, so don't use larger
++         * initial windows.
++         */
++        wnd_init_option_ = 1;
++      if (highest_ack_ == maxseq_ && restart_bugfix_)
++        /*
++         * if there is no outstanding data, don't cut
++         * down ssthresh_.
++         */
++        slowdown(CLOSE_CWND_ONE);
++      else if (highest_ack_ < recover_ &&
++               last_cwnd_action_ == CWND_ACTION_ECN)
++      {
++        /*
++         * if we are in recovery from a recent ECN,
++         * don't cut down ssthresh_.
++         */
++        slowdown(CLOSE_CWND_ONE);
++      }
++      else
++      {
++        ++nrexmit_;
++        last_cwnd_action_ = CWND_ACTION_TIMEOUT;
++        // slowdown(CLOSE_SSTHRESH_HALF|CLOSE_CWND_RESTART);
++        slowdown(CLOSE_FASTER); // TCPW action
++      }
++    }
++    /* if there is no outstanding data, don't back off rtx timer */
++    if (highest_ack_ == maxseq_ && restart_bugfix_)
++    {
++      reset_rtx_timer(0, 0);
++    }
++    else
++    {
++      reset_rtx_timer(0, 1);
++    }
++    last_cwnd_action_ = CWND_ACTION_TIMEOUT;
++    send_much(0, TCP_REASON_TIMEOUT, maxburst_);
++  }
++  else
++  {
++    timeout_nonrtx(tno);
++  }
++}
++
++int time_to_print = 0;
++void ARenoTcpAgent::recv(Packet *pkt, Handler *)
++{
++
++  // check if it has been called
++  if (DEBUG)
++    printf("recv() called!\n");
++
++  if (PDEBUG)
++    printf("1\n");
++  hdr_tcp *tcph = hdr_tcp::access(pkt);
++  ts_peer_ = tcph->ts();
++
++  double fr_now = Scheduler::instance().clock();
++  printf("time %f bwe*min_rtt %f\n", fr_now, current_bwe_ * min_rtt_estimate/1000000);
++
++  if (PDEBUG)
++    printf("2\n");
++  // last_ack_ indicates the ack no. of the ack received _before_
++  // the current one
++
++  // START BWE COMPUTATION
++  // Idea: cumulative ACKs acking more than 2 packets count for 1 packet
++  //   since DUPACKs have already been accounted for
++  int cumul_ack = tcph->seqno_ - last_ack_;
++  myseqno_ = tcph->seqno_;
++  if (PDEBUG)
++    printf("3\n");
++  if (cumul_ack > 1)
++  {
++
++    /* check if current ACK ACKs fewer or same number of segments than */
++    /* expected: if so, the missing ones were already accounted for by */
++    /* DUPACKs, and current ACK only counts as 1 */
++    if (unaccounted_ >= cumul_ack)
++    {
++      unaccounted_ = unaccounted_ - cumul_ack + 1;
++      cumul_ack = 1;
++    }
++    else
++      /* check if current ACK ACKs more segments than expected: if so,   */
++      /* part of them were already accounted for by DUPACKs; the rest    */
++      /* are cumulatively ACKed by present ACK. Make present ACK count   */
++      /* as the unacknowledged ACKs in excess*/
++      if (unaccounted_ < cumul_ack)
++      {
++        cumul_ack -= unaccounted_;
++        unaccounted_ = 0;
++      }
++  }
++  if (PDEBUG)
++    printf("4\n");
++  /* if cumul_ack=0, the current ACK is clearly a DUPACK and should */
++  /* count 1 */
++  if (cumul_ack == 0)
++  {
++    unaccounted_++;
++    cumul_ack = 1;
++  }
++
++  /* safety check; if the previous steps are followed exactly,      */
++  /* cumul_ack should not be >2 unless some strage events occur     */
++  /* (e.g., an ACK is dropped on the way back and the following one */
++  /* appears to ACK more than its due)                              */
++  if (PDEBUG)
++    printf("5\n");
++  if (cumul_ack > 2)
++  {
++    cumul_ack = 2;
++  }
++
++  double rtt_estimate = t_rtt_ * tcp_tick_;
++
++  if ((rtt_estimate < min_rtt_estimate) && (rtt_estimate > 0))
++  {
++    min_rtt_estimate = rtt_estimate;
++  }
++
++  nackpack_ += cumul_ack;
++
++  int acked_size = size_ * 8 * cumul_ack;
++  double ack_interv = fr_now - lastackrx_;
++  double sample_bwe;
++
++  if (PDEBUG)
++    printf("6 %d %d %d %d\n", acked_size, ack_interv, tau_ * 2);
++
++  if (ack_interv <= 0) printf("negative ack_interv\n");
++  sample_bwe = acked_size / ack_interv;
++  current_bwe_ = current_bwe_ * .9047 +
++                 (sample_bwe + last_bwe_sample_) * .0476;
++
++  if (PDEBUG)
++    printf("7\n");
++#ifdef MYDEBUG
++  hdr_ip *iph = hdr_ip::access(pkt);
++  char *src_portaddr = Address::instance().print_portaddr(iph->sport());
++  printf("sc%s: ack. no. %d at time %f, bwe=%f, cwnd = %d, ssthresh_ = %d\n",
++         src_portaddr, tcph->seqno_, fr_now, current_bwe_ / 1000000,
++         (int)cwnd_, (int)ssthresh_);
++  printf("sc%s: now = %f, acked_size = %d, rxdiff = %f, last_ack_ = %d\n",
++         src_portaddr, fr_now, acked_size, (fr_now - lastackrx_), last_ack_);
++  printf("sc%s: unaccounted_ = %d, fr_a_= %f, min_rtt_estimate = %f\n",
++         src_portaddr, unaccounted_, fr_a_, min_rtt_estimate);
++#endif
++#ifdef MYDEBUG_RTT
++  double f = t_rtt_ * tcp_tick_;
++  printf("source %s: %f cwnd=%d	      bwe=%f	  rtt=%f\n",
++         src_portaddr, fr_now, (int)cwnd_, current_bwe_ / 1000000, f);
++#endif
++#ifdef MYREPORT
++  hdr_ip *iph = hdr_ip::access(pkt);
++  char *src_portaddr = Address::instance().print_portaddr(iph->src());
++  printf("%s    %f      %d      %f      %d\n",
++         src_portaddr, fr_now, (int)cwnd_, current_bwe_ / 1000000,
++         (int)ssthresh_);
++#endif
++
++  last_bwe_sample_ = sample_bwe;
++  lastackrx_ = fr_now;
++
++  /* grow cwnd and check if the connection is done */
++  if (tcph->seqno() > last_ack_)
++  {
++    recv_newack_helper(pkt);
++    if (last_ack_ == 0 && delay_growth_)
++    {
++      cwnd_ = initial_window();
++    }
++  }
++  else if (tcph->seqno() == last_ack_)
++  {
++    if (hdr_flags::access(pkt)->eln_ && eln_)
++    {
++      tcp_eln(pkt);
++      return;
++    }
++    if (++dupacks_ == NUMDUPACKS)
++    {
++      dupack_action();
++    }
++  }
++  Packet::free(pkt);
++  /*
++   * Try to send more data.
++   */
++  send_much(0, 0, maxburst_);
++
++  // print the bandwidth delay product wrt time
++
++  // if (fr_now > time_to_print)
++  // {
++  //   printf("BDP: time %f bwe*minrtt %f cwnd %f\n", fr_now, current_bwe_ * min_rtt_estimate, (double)cwnd_);
++  //   time_to_print += 1;
++  // }
++
++}
++
++/*
++ * open up the congestion window
++ */
++void ARenoTcpAgent::opencwnd()
++{
++  double increment;
++  if (cwnd_ < ssthresh_)
++  {
++    /* slow-start (exponential) */
++    cwnd_ += 1;
++  }
++  else
++  {
++
++    cwnd_ = open_congestion_window();
++    return;
++
++    /* linear */
++    double f;
++    switch (wnd_option_)
++    {
++    case 1:
++      /* This is the standard algorithm. */
++      increment = increase_num_ / cwnd_;
++      if ((last_cwnd_action_ == 0 ||
++           last_cwnd_action_ == CWND_ACTION_TIMEOUT) &&
++          max_ssthresh_ > 0)
++      {
++        increment = limited_slow_start(cwnd_,
++                                       max_ssthresh_, increment);
++      }
++      cwnd_ += increment;
++
++    default:
++#ifdef notdef
++      /*XXX*/
++      error("illegal window option %d", wnd_option_);
++#endif
++      abort();
++    }
++  }
++
++  // if maxcwnd_ is set (nonzero), make it the cwnd limit
++  if (((int)cwnd_ > maxcwnd_))
++  {
++    cwnd_ = maxcwnd_;
++  }
++
++  return;
++}
++
++/////////////////// Added by MV
++// these where originally in TcpAgent()
++
++void ARenoTcpAgent::slowdown(int how)
++{
++  // check if it is called
++  if (DEBUG)
++    printf("slowdown called\n");
++
++  double decrease; /* added for highspeed - sylvia */
++  double win, halfwin, decreasewin;
++  int slowstart = 0;
++  ++ncwndcuts_;
++  if (!(how & TCP_IDLE) && !(how & NO_OUTSTANDING_DATA))
++  {
++    ++ncwndcuts1_;
++  }
++
++  // we are in slowstart for sure if cwnd < ssthresh
++  if (cwnd_ < ssthresh_)
++    slowstart = 1;
++
++  cwnd_ = close_congestion_window();
++
++  // if (precision_reduce_)
++  // {
++  //   halfwin = windowd() / 2;
++  //   if (wnd_option_ == 6)
++  //   {
++  //     /* binomial controls */
++  //     decreasewin = windowd() - (1.0 - decrease_num_) * pow(windowd(), l_parameter_);
++  //   }
++  //   else if (wnd_option_ == 8 && (cwnd_ > low_window_))
++  //   {
++  //     /* experimental highspeed TCP */
++  //     decrease = decrease_param();
++  //     // if (decrease < 0.1)
++  //     //	decrease = 0.1;
++  //     decrease_num_ = decrease;
++  //     decreasewin = windowd() - (decrease * windowd());
++  //   }
++  //   else
++  //   {
++  //     decreasewin = decrease_num_ * windowd();
++  //   }
++  //   win = windowd();
++  // }
++  // else
++  // {
++  //   int temp;
++  //   temp = (int)(window() / 2);
++  //   halfwin = (double)temp;
++  //   if (wnd_option_ == 6)
++  //   {
++  //     /* binomial controls */
++  //     temp = (int)(window() - (1.0 - decrease_num_) * pow(window(), l_parameter_));
++  //   }
++  //   else if ((wnd_option_ == 8) && (cwnd_ > low_window_))
++  //   {
++  //     /* experimental highspeed TCP */
++  //     decrease = decrease_param();
++  //     // if (decrease < 0.1)
++  //     //        decrease = 0.1;
++  //     decrease_num_ = decrease;
++  //     temp = (int)(windowd() - (decrease * windowd()));
++  //   }
++  //   else
++  //   {
++  //     temp = (int)(decrease_num_ * window());
++  //   }
++  //   decreasewin = (double)temp;
++  //   win = (double)window();
++  // }
++
++  // // ssthresh_
++  // if (how & CLOSE_SSTHRESH_HALF)
++  //   // For the first decrease, decrease by half
++  //   // even for non-standard values of decrease_num_.
++  //   if (first_decrease_ == 1 || slowstart ||
++  //       last_cwnd_action_ == CWND_ACTION_TIMEOUT)
++  //   {
++  //     // Do we really want halfwin instead of decreasewin
++  //     // after a timeout?
++  //     ssthresh_ = (int)halfwin;
++  //   }
++  //   else
++  //   {
++  //     ssthresh_ = (int)decreasewin;
++  //   }
++  // else if (how & THREE_QUARTER_SSTHRESH)
++  //   if (ssthresh_ < 3 * cwnd_ / 4)
++  //     ssthresh_ = (int)(3 * cwnd_ / 4);
++
++  // // cwnd_
++  // if (how & CLOSE_CWND_HALF)
++  //   // For the first decrease, decrease by half
++  //   // even for non-standard values of decrease_num_.
++  //   if (first_decrease_ == 1 || slowstart || decrease_num_ == 0.5)
++  //   {
++  //     cwnd_ = halfwin;
++  //   }
++  //   else
++  //   {
++  //     cwnd_ = decreasewin;
++  //   }
++  // else if (how & CWND_HALF_WITH_MIN)
++  // {
++  //   // We have not thought about how non-standard TCPs, with
++  //   // non-standard values of decrease_num_, should respond
++  //   // after quiescent periods.
++  //   cwnd_ = decreasewin;
++  //   if (cwnd_ < 1)
++  //     cwnd_ = 1;
++  // }
++  // ///
++  // else if (how & CLOSE_FASTER)
++  // {
++  //   // TCP AReno
++  //   // this might be critical what with the coarseness of the timer;
++  //   // keep in mind that TCP computes the timeout as
++  //   //              (#of ticks) * (tick_duration)
++  //   // We need to do away with the coarseness...
++
++  //   double rtt_estimate = t_rtt_ * tcp_tick_;
++
++  //   if ((rtt_estimate < min_rtt_estimate) && (rtt_estimate > 0))
++  //   {
++  //     min_rtt_estimate = rtt_estimate;
++  //   }
++  //   /* New adaptive BWE/a strategy */
++  //   if (ssthresh_ > cwnd_)
++  //   {
++  //     /* loss has occurred while I was in slowstart */
++  //     fr_a_++;
++  //     if (fr_a_ > 4)
++  //       fr_a_ = 4;
++  //   }
++  //   else
++  //   {
++  //     /* loss has occurred while I was in congestion avoidance */
++  //     fr_a_ = 1;
++  //   }
++  //   ssthresh_ = (int)(((current_bwe_ / size_ / 8) * min_rtt_estimate) / fr_a_);
++  //   cwnd_ = 1;
++  // }
++  // ///
++  // else if (how & CLOSE_CWND_RESTART)
++  //   cwnd_ = int(wnd_restart_);
++  // else if (how & CLOSE_CWND_INIT)
++  //   cwnd_ = int(wnd_init_);
++  // else if (how & CLOSE_CWND_ONE)
++  //   cwnd_ = 1;
++  // else if (how & CLOSE_CWND_HALF_WAY)
++  // {
++  //   // cwnd_ = win - (win - W_used)/2 ;
++  //   cwnd_ = W_used + decrease_num_ * (win - W_used);
++  //   if (cwnd_ < 1)
++  //     cwnd_ = 1;
++  // }
++  // ///
++  // ///
++  // if (ssthresh_ < 2)
++  //   ssthresh_ = 2;
++  // if (cwnd_ < 1)
++  //   cwnd_ = 1;
++  // if (how & (CLOSE_CWND_HALF | CLOSE_CWND_RESTART | CLOSE_CWND_INIT | CLOSE_CWND_ONE))
++  //   cong_action_ = TRUE;
++
++  fcnt_ = count_ = 0;
++  if (first_decrease_ == 1)
++    first_decrease_ = 0;
++  // for event tracing slow start
++  if (cwnd_ == 1 || slowstart)
++    // Not sure if this is best way to capture slow_start
++    // This is probably tracing a superset of slowdowns of
++    // which all may not be slow_start's --Padma, 07/'01.
++    trace_event("SLOW_START");
++}
++
++/*
++ * Process a packet that acks previously unacknowleged data.
++ */
++void ARenoTcpAgent::newack(Packet *pkt)
++{
++  hdr_tcp *tcph = hdr_tcp::access(pkt);
++  myseqno_ = tcph->seqno_;
++  // call parent newack
++  RenoTcpAgent::newack(pkt);
++}
++
++// AReno binds
++int ARenoTcpAgent::delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer)
++{
++
++  if (delay_bind(varName, localName, "lastackno_", &lastackno_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "lastackrx_", &lastackrx_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "fr_alpha_", &fr_alpha_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "filter_type_", &filter_type_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "tau_", &tau_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "mss_", &mss_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "current_bwe_", &current_bwe_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "last_bwe_sample_", &last_bwe_sample_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "unaccounted_", &unaccounted_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "fr_a_", &fr_a_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "min_rtt_estimate", &min_rtt_estimate, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "myseqno_", &myseqno_, tracer))
++    return TCL_OK;
++
++  return RenoTcpAgent::delay_bind_dispatch(varName, localName, tracer);
++}
++
++/* tickoff is the time since the clock last ticked when
++ *  the packet we are using to compute the RTT was sent
++ */
++
++/* t_rtt_ is the number of ticks that have occurred so far,
++ * starting from the tick BEFORE the packet was sent
++ */
++
++double ARenoTcpAgent::estimate_cong_level()
++{
++  double rtt_estimate = t_rtt_ * tcp_tick_;
++
++  // update the congestion level
++  if ((rtt_cong - min_rtt_estimate <= 0))
++  {
++    return 0;
++  }
++  double probable_cong_level = (rtt_estimate - min_rtt_estimate) / (rtt_cong - min_rtt_estimate);
++  probable_cong_level = (probable_cong_level < 0) ? 0 : probable_cong_level;
++  double cong_level = (probable_cong_level < 1) ? probable_cong_level : 1;
++  // printf("time %f cong_level %f\n", fr_now, cong_level);
++  last_rtt_cong = rtt_cong;
++
++  return cong_level;
++}
++
++int ARenoTcpAgent::open_congestion_window()
++{
++  double cong_level = estimate_cong_level();
++  int factor_m = 10; // 10 mbps in paper
++
++  double max_seg_size = 1460;
++  double cwnd_inc_max = current_bwe_ / factor_m * max_seg_size;
++
++  double alpha = 10;
++  double beta = 2.0 * cwnd_inc_max * ((1.0 / alpha) - ((1.0 / alpha + 1.0) / (pow(2.71, alpha))));
++  double gamma = 1.0 - (2.0 * cwnd_inc_max * ((1.0 / alpha) - ((1.0 / alpha + 0.5) / (pow(2.71, alpha)))));
++
++  cwnd_inc = (int)((cwnd_inc_max / pow(2.71, alpha * cong_level)) + (beta * cong_level) + gamma);
++  cwnd_inc = (cwnd_inc > cwnd_inc_max) ? cwnd_inc_max : cwnd_inc;
++
++  // base_window = use new renos base window
++  double adder;
++  if (cwnd_ > 0) {
++    adder = max_seg_size / cwnd_;
++    adder = (adder < 1) ? 1 : adder;
++  } else {
++    adder = 1;
++  }
++  cwnd_base += (int)adder;
++
++  // change probe window
++  if (cwnd_ > 0) {
++    cwnd_probe = (int)(cwnd_probe + cwnd_inc / cwnd_);
++    cwnd_probe = (cwnd_probe < 0) ? 0 : cwnd_probe;
++  } else {
++    cwnd_probe = 0;
++  }
++
++  // change cwnd
++  return cwnd_base + cwnd_probe;
++}
++
++int ARenoTcpAgent::close_congestion_window()
++{
++  double max_seg_size = 1460;
++  double cong_level = estimate_cong_level();
++  int ssthresh_ = (int)(cwnd_ / (1.0 + cong_level));
++  ssthresh_ = (2 * max_seg_size > ssthresh_) ? 2 * max_seg_size : ssthresh_;
++  ssthresh_ = (ssthresh_ > (int)cwnd_) ? (int)cwnd_ : ssthresh_;
++
++  // reset calculations
++  cwnd_base = ssthresh_;
++  cwnd_probe = 0;
++
++  return cwnd_base + cwnd_probe;
++}
+\ No newline at end of file
+diff --git a/tcp/tcp-areno.h b/tcp/tcp-areno.h
+new file mode 100644
+index 0000000..6eafed2
+--- /dev/null
++++ b/tcp/tcp-areno.h
+@@ -0,0 +1,94 @@
++/* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */
++/*
++ * Copyright (c) 1991-2001 Regents of the University of California.
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *	This product includes software developed by the Computer Systems
++ *	Engineering Group at Lawrence Berkeley Laboratory.
++ * 4. Neither the name of the University nor of the Laboratory may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * @(#) $Header: /mvalla/tcp-areno.h,v 1.0 2001/08/07 15:14:54 mvalla Exp mvalla $ (LBL)
++ */
++
++#ifndef tcp_areno_h
++#define tcp_areno_h
++
++#include "tcp.h"
++
++/* these are bits for how to change the cwnd and ssthresh values */
++/* used by TCP-W						 */
++#define CLOSE_FASTER 0x00000400
++
++/* TCP AReno */
++class ARenoTcpAgent : public virtual RenoTcpAgent
++{
++
++public:
++  ARenoTcpAgent();
++  virtual void recv(Packet *pkt, Handler *);
++  virtual void dupack_action();
++  virtual void timeout(int tno);
++
++  /* these where originally in class TcpAgent (file: tcp.h) */
++  virtual void opencwnd();
++  virtual void slowdown(int how);
++  virtual void newack(Packet *pkt);
++  virtual int delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer);
++
++protected:
++  double lastackno_; /* Last ACK number */
++  double lastackrx_; /* Time last ACK was received */
++  double fr_alpha_;  /* exponential averaging coefficient */
++  int filter_type_;  /* exponential filter type */
++  double tau_;       /* time constant used in filter 3 */
++
++  /* these where originally in class TcpAgent (file: tcp.h) */
++  int mss_;                /* Maximum Segment Size - MGM+CC 31/08/2000 */
++  double current_bwe_;     /* Current Bandwidth estimation */
++  double last_bwe_sample_; /* Last sample used to compute BWE */
++  int unaccounted_;        /* unaccounted ACKs already received */
++  double fr_a_;            /* bandwidth reduction factor */
++  double min_rtt_estimate; /* smaller recorded RTT estimate */
++  TracedInt myseqno_;      /* my own exportable copy of seqno */
++
++  /* variables added by me */
++  double estimate_cong_level();
++  double rtt_cong; /* current RTT congestion */
++  double last_rtt_cong;   /* last RTT */
++  double rtt_factor; /* RTT factor, a */  
++
++  int cwnd_base; /* base cwnd */
++  int cwnd_probe; /* probe cwnd */
++  int cwnd_inc; /* cwnd increment */
++
++  int max_seg_size; /* maximum segment size */
++
++  int open_congestion_window();
++  int close_congestion_window();
++};
++
++#endif /* tcp_areno_h */
+diff --git a/tcp/tcp-westwood-nr.cc b/tcp/tcp-westwood-nr.cc
+new file mode 100644
+index 0000000..30812ac
+--- /dev/null
++++ b/tcp/tcp-westwood-nr.cc
+@@ -0,0 +1,597 @@
++/* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */
++/*
++ * Copyright (c) 1990, 2001 Regents of the University of California.
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms are permitted
++ * provided that the above copyright notice and this paragraph are
++ * duplicated in all such forms and that any documentation,
++ * advertising materials, and other materials related to such
++ * distribution and use acknowledge that the software was developed
++ * by the University of California, Lawrence Berkeley Laboratory,
++ * Berkeley, CA.  The name of the University may not be used to
++ * endorse or promote products derived from this software without
++ * specific prior written permission.
++ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
++ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
++ * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
++ */
++
++// TCPW-NR - TCPW Westwood with NewReno Features
++//
++// tcp-westwood-nr.cc - v1.3 - 2002/06/21 - mvalla
++//
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/types.h>
++#include <math.h>
++
++#include "packet.h"
++#include "ip.h"
++#include "tcp.h"
++#include "flags.h"
++#include "address.h"
++
++#include "tcp-westwood-nr.h"
++
++static class WestwoodNRTcpClass : public TclClass {
++public:
++	WestwoodNRTcpClass() : TclClass("Agent/TCP/WestwoodNR") {}
++	TclObject* create(int, const char*const*) {
++		return (new WestwoodNRTcpAgent());
++	}
++} class_westwoodnr;
++
++///// 
++// WestwoodNRTcpAgent()
++WestwoodNRTcpAgent::WestwoodNRTcpAgent() : NewRenoTcpAgent(),
++  // these where originally in TcpAgent()
++  current_bwe_(0), last_bwe_sample_(0), unaccounted_(0),
++  fr_a_(0), min_rtt_estimate(5.0), myseqno_(1),
++
++  lastackrx_(0.0), fr_alpha_(0.9), filter_type_(1), tau_(1.0)
++  
++{
++	// Read defaults variables from ns-defaults.tcl
++	
++	// these where originally in TcpAgent()
++	bind("current_bwe_", &current_bwe_);
++	bind("last_bwe_sample_", &last_bwe_sample_);
++  	bind("unaccounted_", &unaccounted_);
++  	bind("fr_a_", &fr_a_);
++  	bind("min_rtt_estimate", &min_rtt_estimate);
++	
++	bind("fr_alpha_", &fr_alpha_);
++	bind("filter_type_", &filter_type_);
++	bind("tau_", &tau_);
++	
++	// these where originally in NewRenoTcpAgent()
++	bind("newreno_changes_", &newreno_changes_);
++	bind("newreno_changes1_", &newreno_changes1_);
++	bind("exit_recovery_fix_", &exit_recovery_fix_);
++	bind("partial_window_deflation_", &partial_window_deflation_);
++	
++	// printf("Westwood New Reno binding done!\n");
++}
++
++///// 
++// dupack_action()
++void WestwoodNRTcpAgent::dupack_action()
++{
++	int recovered = (highest_ack_ > recover_);
++        int allowFastRetransmit = allow_fast_retransmit(last_cwnd_action_);
++        if (recovered || (!bug_fix_ && !ecn_) || allowFastRetransmit) {
++                goto reno_action;
++        }
++
++        if (ecn_ && last_cwnd_action_ == CWND_ACTION_ECN) {
++                last_cwnd_action_ = CWND_ACTION_DUPACK;
++                /*
++                 * What if there is a DUPACK action followed closely by ECN
++                 * followed closely by a DUPACK action?
++                 * The optimal thing to do would be to remember all
++                 * congestion actions from the most recent window
++                 * of data.  Otherwise "bugfix" might not prevent
++                 * all unnecessary Fast Retransmits.
++                 */
++                reset_rtx_timer(1,0);
++                output(last_ack_ + 1, TCP_REASON_DUPACK);
++                return;
++        }
++
++        if (bug_fix_) {
++                /*
++                 * The line below, for "bug_fix_" true, avoids
++                 * problems with multiple fast retransmits in one
++                 * window of data.
++                 */
++                return;
++        }
++
++reno_action:
++        // NOTE (by MV): this part is not really used anymore in the current filter
++        /* New adaptive BWE/a strategy */
++        if (ssthresh_ > cwnd_) {
++        	/* 3dupacks were received while I was in slowstart */
++        	fr_a_+=0.25;
++        	if (fr_a_ > 4)
++        		fr_a_=4;
++        	} else {
++        	/* 3dupacks were received while I was in congestion avoidance */
++        		fr_a_ = 1;
++        	}
++        //
++        //  ssthresh_ = (int)((current_bwe_/size_/8) * min_rtt_estimate)/fr_a_;
++        //
++        // ---
++        // WARNING!!!'a' is no longer being used
++      
++        ssthresh_ = (int)((current_bwe_/size_/8) * min_rtt_estimate);
++      
++        // Safety Check: ssthresh should not be < 2
++        // added 2002-05-20 by MV
++        if (ssthresh_ < 2) {
++        	ssthresh_ = 2;
++        }
++	
++	/* our algorithm dictates that CWIN=ssthresh after a 3DUPACK, but */
++	/* we should not forcefully increase CWIN if it is smaller than   */
++	/* ssthresh                                                       */
++	
++      	if (cwnd_ > ssthresh_) {
++      		cwnd_ = ssthresh_;
++      	}
++              
++	trace_event("TCPWNR_FAST_RETX");
++        recover_ = maxseq_;
++        last_cwnd_action_ = CWND_ACTION_DUPACK;
++        // The slowdown was already performed
++        // slowdown(CLOSE_SSTHRESH_HALF|CLOSE_CWND_HALF);
++        reset_rtx_timer(1,0);
++        output(last_ack_ + 1, TCP_REASON_DUPACK);
++        return;
++      
++}
++
++
++///// 
++// timeout()
++void WestwoodNRTcpAgent::timeout(int tno)
++{
++	/* retransmit timer */
++	if (tno == TCP_TIMER_RTX) {
++		// These three lines catch the RenoTcpAgent::timeout() behavior
++		dupwnd_ = 0;
++		dupacks_ = 0;
++		if (bug_fix_) recover_ = maxseq_;
++				
++		// There has been a timeout - will trace this event
++		trace_event("TIMEOUT");
++
++	        if (cwnd_ < 1) cwnd_ = 1;
++		if (highest_ack_ == maxseq_ && !slow_start_restart_) {
++			/*
++			 * TCP option:
++			 * If no outstanding data, then don't do anything.  
++			 */
++			 // Should this return be here?
++			 // What if CWND_ACTION_ECN and cwnd < 1?
++			 // return;
++		} else {
++			recover_ = maxseq_;
++			if (highest_ack_ == -1 && wnd_init_option_ == 2)
++				/* 
++				 * First packet dropped, so don't use larger
++				 * initial windows. 
++				 */
++				wnd_init_option_ = 1;
++			if (highest_ack_ == maxseq_ && restart_bugfix_)
++			       /* 
++				* if there is no outstanding data, don't cut 
++				* down ssthresh_.
++				*/
++				slowdown(CLOSE_CWND_ONE);
++			else if (highest_ack_ < recover_ &&
++			  last_cwnd_action_ == CWND_ACTION_ECN) {
++			       /*
++				* if we are in recovery from a recent ECN,
++				* don't cut down ssthresh_.
++				*/
++				slowdown(CLOSE_CWND_ONE);
++			}
++			else {
++				++nrexmit_;
++				last_cwnd_action_ = CWND_ACTION_TIMEOUT;
++				//slowdown(CLOSE_SSTHRESH_HALF|CLOSE_CWND_RESTART);
++				slowdown(CLOSE_FASTER); // TCPW action
++			}
++		}
++		/* if there is no outstanding data, don't back off rtx timer */
++		if (highest_ack_ == maxseq_ && restart_bugfix_) {
++			reset_rtx_timer(0,0);
++		}
++		else {
++			reset_rtx_timer(0,1);
++		}
++		last_cwnd_action_ = CWND_ACTION_TIMEOUT;
++		send_much(0, TCP_REASON_TIMEOUT, maxburst_);
++	} 
++	else {
++		timeout_nonrtx(tno);
++	}
++}
++
++
++///// 
++// bwe_computation()
++void WestwoodNRTcpAgent::bwe_computation(Packet *pkt) {
++	
++	hdr_tcp *tcph = hdr_tcp::access(pkt);
++	double fr_now = Scheduler::instance().clock();
++	
++	// last_ack_ indicates the ack no. of the ack received _before_
++	// the current one 
++	
++	// START BWE COMPUTATION
++	// Idea: cumulative ACKs acking more than 2 packets count for 1 packet
++	//   since DUPACKs have already been accounted for
++	int cumul_ack = tcph->seqno_ - last_ack_;
++	myseqno_ = tcph->seqno_;
++	
++	if (cumul_ack > 1) {
++
++	  /* check if current ACK ACKs fewer or same number of segments than */
++	  /* expected: if so, the missing ones were already accounted for by */
++	  /* DUPACKs, and current ACK only counts as 1 */
++	  if (unaccounted_ >= cumul_ack) {
++	    unaccounted_ = unaccounted_ - cumul_ack + 1;
++	    cumul_ack=1;
++	  } else
++	  /* check if current ACK ACKs more segments than expected: if so,   */
++	  /* part of them were already accounted for by DUPACKs; the rest    */
++	  /* are cumulatively ACKed by present ACK. Make present ACK count   */
++	  /* as the unacknowledged ACKs in excess*/
++	  if (unaccounted_ < cumul_ack) {
++	    cumul_ack-=unaccounted_;
++	    unaccounted_=0;
++	  }
++	}
++
++  /* if cumul_ack=0, the current ACK is clearly a DUPACK and should */
++	/* count 1 */
++	if (cumul_ack == 0) {
++	  unaccounted_++;
++	  cumul_ack=1;
++	}
++	  
++  /* safety check; if the previous steps are followed exactly,      */
++	/* cumul_ack should not be >2 unless some strage events occur     */
++	/* (e.g., an ACK is dropped on the way back and the following one */
++	/* appears to ACK more than its due)                              */
++
++	if (cumul_ack > 2) {
++	  cumul_ack=2;
++	  }
++
++		double rtt_estimate = t_rtt_ * tcp_tick_;
++		
++	  if ((rtt_estimate < min_rtt_estimate)&&(rtt_estimate > 0)) {
++		  min_rtt_estimate = rtt_estimate;
++		}
++		
++	// The variable nackpack_ will be incremented later in NewRenoTcpAgent::recv(...)
++	// 2002-05-09 by MV
++	//nackpack_+= cumul_ack;
++	
++	int acked_size = size_ * 8 * cumul_ack;
++	double ack_interv = fr_now - lastackrx_;
++	      				
++	double sample_bwe;
++	
++	switch (filter_type_) {
++	  case 0:
++          //   original filter
++	  sample_bwe = acked_size/ack_interv;
++	  current_bwe_ = current_bwe_ * fr_alpha_ + sample_bwe * (1 - fr_alpha_);
++	  break;
++	
++	  case 1:
++	  // filter type 1
++	  sample_bwe = acked_size/ack_interv;
++	  current_bwe_ = current_bwe_ * .9047 + 
++	               (sample_bwe + last_bwe_sample_) * .0476;
++	  break;
++	
++	  case 2:
++	  // filter type 2: 'lower' pass
++	  sample_bwe = acked_size/ack_interv;
++	  current_bwe_ = current_bwe_ * .93548 + 
++	               (sample_bwe+last_bwe_sample_) * .03225;
++	  break;
++
++	  case 3:
++	  // filter type 3: time constant tau_
++
++	  // compute how many intervals of length tau_/2 went by since we
++	  // received the last ACK. For each tau_/2 interval without ACK, feed 
++          // a zero-bandwidth sample to the filter.
++	
++	  int idle_intervals = (int)(ack_interv / tau_*2);
++	  //	  printf("idle_intervals = %d (%f,%f)=%f\n", idle_intervals, ack_interv, tau_,
++	  //				ack_interv / tau_);
++	  //		printf("idle_intervals = %d, ratio= %f\n",idle_intervals, ack_interv / tau_);
++	  
++	  ack_interv -= tau_ /2 * idle_intervals;
++	  
++	  //if ( (ack_interv < 0.01) && (idle_intervals == 0) ){
++	  //	printf("TCP-W error: (ack_interv < 0.01) && (idle_intervals == 0)\n");
++	  //	printf("time=%lf, last_ack=%lf, ack_interv=%lf\n", fr_now, lastackrx_, ack_interv);
++	  //	//exit(0);
++	  //}	
++	  
++	  if ( (ack_interv < 0.01) && (idle_intervals > 0) ) {
++	  // ack_interv was a multiple of tau_/2 or the remainder is too small (less than 10ms), so 
++	  // we consider tau_ / 2 as the last interval
++	  	ack_interv = tau_ / 2;
++		idle_intervals -= 1; // we do not count the last tau_/2 interval  	
++	  }
++	  
++	  sample_bwe = acked_size/ack_interv;
++	  
++	  if (idle_intervals > 0) { // feed the filter
++	  	// printf("idle_intervals = %d\n", idle_intervals);
++		for (int i=0; i<idle_intervals; i++) {
++			current_bwe_ = current_bwe_ * 3 / 5  + last_bwe_sample_/5;		    
++			last_bwe_sample_ = 0;
++			//  printf("idle_interval: current_bwe=%f\n", current_bwe_);
++		}
++	  }
++	  
++	  double last_tmp_bwe = current_bwe_; // we need it just for the printf...
++	  current_bwe_ = current_bwe_ * (2*tau_/ack_interv - 1) /
++		           (2*tau_/ack_interv + 1) + 
++		           (sample_bwe + last_bwe_sample_)/(2*tau_/ack_interv + 1);
++
++	  if (current_bwe_ < 0) {
++			printf("TCP-W error: current_bwe_ < 0\n");
++			printf("time: %f, last_tmp_bwe=%f\n", fr_now, last_tmp_bwe);
++			printf("current_bwe_%f, ack_interv=%f, sample_bwe=%f, last_bwe_sample_=%f\n",
++					current_bwe_, ack_interv, sample_bwe, last_bwe_sample_);
++			exit(0);
++	  }
++	} // end of filter_type switch
++		 	
++#ifdef MYDEBUG
++	hdr_ip *iph = hdr_ip::access(pkt);  
++  	char *src_portaddr = Address::instance().print_portaddr(iph->sport());
++	printf("sc%s: ack. no. %d at time %f, bwe=%f, cwnd = %d, ssthresh_ = %d\n",
++	      src_portaddr, tcph->seqno_, fr_now, current_bwe_/1000000,
++	      (int)cwnd_, (int)ssthresh_);
++	printf("sc%s: now = %f, acked_size = %d, rxdiff = %f, last_ack_ = %d\n",
++	         src_portaddr, fr_now, acked_size, (fr_now - lastackrx_), last_ack_);
++	printf("sc%s: unaccounted_ = %d, fr_a_= %f, min_rtt_estimate = %f\n", 
++			     src_portaddr, unaccounted_, fr_a_, min_rtt_estimate);
++#endif
++#ifdef MYDEBUG_RTT
++	double f = t_rtt_ * tcp_tick_;
++	printf("source %s: %f cwnd=%d	      bwe=%f	  rtt=%f\n", 
++	      src_portaddr, fr_now, (int)cwnd_, current_bwe_/1000000, f);     
++#endif	
++#ifdef MYREPORT	
++	hdr_ip *iph = hdr_ip::access(pkt);  
++	char *src_portaddr = Address::instance().print_portaddr(iph->src());
++	printf("%s    %f      %d      %f      %d\n", 
++	      src_portaddr, fr_now, (int)cwnd_, current_bwe_/1000000,
++	      (int)ssthresh_);        
++#endif		
++
++	last_bwe_sample_ = sample_bwe;
++	lastackrx_ = fr_now; 
++}
++
++
++///// 
++// recv()
++void WestwoodNRTcpAgent::recv(Packet *pkt, Handler* h)
++{ 
++	// START BWE COMPUTATION
++	bwe_computation(pkt);
++	
++	NewRenoTcpAgent::recv(pkt,h);
++
++}
++
++/////////////////// Added by MV
++// these where originally in TcpAgent()
++
++///// 
++// slowdown()
++
++void
++WestwoodNRTcpAgent::slowdown(int how)
++{
++	double decrease;  /* added for highspeed - sylvia */
++	double win, halfwin, decreasewin;
++	int slowstart = 0;
++	++ncwndcuts_;
++	if (!(how & TCP_IDLE) && !(how & NO_OUTSTANDING_DATA)){
++		++ncwndcuts1_; 
++	}
++	// we are in slowstart for sure if cwnd < ssthresh
++	if (cwnd_ < ssthresh_) 
++		slowstart = 1;
++        if (precision_reduce_) {
++		halfwin = windowd() / 2;
++                if (wnd_option_ == 6) {         
++                        /* binomial controls */
++                        decreasewin = windowd() - (1.0-decrease_num_)*pow(windowd(),l_parameter_);
++                } else if (wnd_option_ == 8 && (cwnd_ > low_window_)) { 
++                        /* experimental highspeed TCP */
++			decrease = decrease_param();
++			//if (decrease < 0.1) 
++			//	decrease = 0.1;
++			decrease_num_ = decrease;
++                        decreasewin = windowd() - (decrease * windowd());
++                } else {
++	 		decreasewin = decrease_num_ * windowd();
++		}
++		win = windowd();
++	} else  {
++		int temp;
++		temp = (int)(window() / 2);
++		halfwin = (double) temp;
++                if (wnd_option_ == 6) {
++                        /* binomial controls */
++                        temp = (int)(window() - (1.0-decrease_num_)*pow(window(),l_parameter_));
++                } else if ((wnd_option_ == 8) && (cwnd_ > low_window_)) { 
++                        /* experimental highspeed TCP */
++			decrease = decrease_param();
++			//if (decrease < 0.1)
++                        //       decrease = 0.1;		
++			decrease_num_ = decrease;
++                        temp = (int)(windowd() - (decrease * windowd()));
++                } else {
++ 			temp = (int)(decrease_num_ * window());
++		}
++		decreasewin = (double) temp;
++		win = (double) window();
++	}
++	if (how & CLOSE_SSTHRESH_HALF)
++		// For the first decrease, decrease by half
++		// even for non-standard values of decrease_num_.
++		if (first_decrease_ == 1 || slowstart ||
++			last_cwnd_action_ == CWND_ACTION_TIMEOUT) {
++			// Do we really want halfwin instead of decreasewin
++		// after a timeout?
++			ssthresh_ = (int) halfwin;
++		} else {
++			ssthresh_ = (int) decreasewin;
++		}
++        else if (how & THREE_QUARTER_SSTHRESH)
++		if (ssthresh_ < 3*cwnd_/4)
++			ssthresh_  = (int)(3*cwnd_/4);
++	if (how & CLOSE_CWND_HALF)
++		// For the first decrease, decrease by half
++		// even for non-standard values of decrease_num_.
++		if (first_decrease_ == 1 || slowstart || decrease_num_ == 0.5) {
++			cwnd_ = halfwin;
++		} else cwnd_ = decreasewin;
++        else if (how & CWND_HALF_WITH_MIN) {
++		// We have not thought about how non-standard TCPs, with
++		// non-standard values of decrease_num_, should respond
++		// after quiescent periods.
++                cwnd_ = decreasewin;
++                if (cwnd_ < 1)
++                        cwnd_ = 1;
++	}
++	///
++	else if (how & CLOSE_FASTER) {
++    	// TCP Westwood
++	// this might be critical what with the coarseness of the timer;
++    	// keep in mind that TCP computes the timeout as
++    	//              (#of ticks) * (tick_duration)
++    	// We need to do away with the coarseness...
++
++		double rtt_estimate = t_rtt_ * tcp_tick_;
++
++	  if ((rtt_estimate < min_rtt_estimate)&&(rtt_estimate > 0)) {
++		   min_rtt_estimate = rtt_estimate;
++		}
++	  /* New adaptive BWE/a strategy */
++	  if (ssthresh_ > cwnd_) {
++		  /* loss has occurred while I was in slowstart */
++		  fr_a_++;
++	  	  if (fr_a_ > 4)
++		    fr_a_=4;
++		} else {
++		  /* loss has occurred while I was in congestion avoidance */
++		  fr_a_ = 1;
++		}
++		ssthresh_ = (int)( ((current_bwe_/size_/8) * min_rtt_estimate)/fr_a_ );
++		cwnd_ = 1;
++	}
++///
++	else if (how & CLOSE_CWND_RESTART) 
++		cwnd_ = int(wnd_restart_);
++	else if (how & CLOSE_CWND_INIT)
++		cwnd_ = int(wnd_init_);
++	else if (how & CLOSE_CWND_ONE)
++		cwnd_ = 1;
++	else if (how & CLOSE_CWND_HALF_WAY) {
++		// cwnd_ = win - (win - W_used)/2 ;
++		cwnd_ = W_used + decrease_num_ * (win - W_used);
++                if (cwnd_ < 1)
++                        cwnd_ = 1;
++	}
++	if (ssthresh_ < 2)
++		ssthresh_ = 2;
++	if (how & (CLOSE_CWND_HALF|CLOSE_CWND_RESTART|CLOSE_CWND_INIT|CLOSE_CWND_ONE))
++		cong_action_ = TRUE;
++
++	fcnt_ = count_ = 0;
++	if (first_decrease_ == 1)
++		first_decrease_ = 0;
++	// for event tracing slow start
++	if (cwnd_ == 1 || slowstart) 
++		// Not sure if this is best way to capture slow_start
++		// This is probably tracing a superset of slowdowns of
++		// which all may not be slow_start's --Padma, 07/'01.
++		trace_event("SLOW_START");
++	
++
++
++	
++}
++
++
++///// 
++// newack()
++/*
++ * Process a packet that acks previously unacknowleged data.
++ */
++void WestwoodNRTcpAgent::newack(Packet* pkt)
++{
++	hdr_tcp *tcph = hdr_tcp::access(pkt);
++	myseqno_ = tcph->seqno_;
++	//call parent newack
++	NewRenoTcpAgent::newack(pkt);
++}
++
++///// 
++// delay_bind_dispatch()
++//Westwood binds
++int
++WestwoodNRTcpAgent::delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer)
++{
++
++	if (delay_bind(varName, localName, "lastackno_", &lastackno_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "lastackrx_", &lastackrx_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "fr_alpha_", &fr_alpha_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "filter_type_", &filter_type_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "tau_", &tau_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "mss_", &mss_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "current_bwe_", &current_bwe_, tracer)) return TCL_OK;
++       	if (delay_bind(varName, localName, "last_bwe_sample_", &last_bwe_sample_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "unaccounted_", &unaccounted_, tracer)) return TCL_OK;
++        if (delay_bind(varName, localName, "fr_a_", &fr_a_, tracer)) return TCL_OK;
++        if (delay_bind(varName, localName, "min_rtt_estimate", &min_rtt_estimate, tracer)) return TCL_OK;
++  	if (delay_bind(varName, localName, "myseqno_", &myseqno_, tracer)) return TCL_OK;
++	
++	// these where originally in NewRenoTcpAgent()
++	if (delay_bind(varName, localName, "newreno_changes_", &newreno_changes_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "newreno_changes1_", &newreno_changes1_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "exit_recovery_fix_", &exit_recovery_fix_, tracer)) return TCL_OK;
++	if (delay_bind(varName, localName, "partial_window_deflation_", &partial_window_deflation_, tracer)) return TCL_OK;
++	
++        return NewRenoTcpAgent::delay_bind_dispatch(varName, localName, tracer);
++}
++
++/* tickoff is the time since the clock last ticked when 
++ *  the packet we are using to compute the RTT was sent
++ */
++
++/* t_rtt_ is the number of ticks that have occurred so far,
++ * starting from the tick BEFORE the packet was sent
++ */
++
+diff --git a/tcp/tcp-westwood-nr.h b/tcp/tcp-westwood-nr.h
+new file mode 100644
+index 0000000..e976dc4
+--- /dev/null
++++ b/tcp/tcp-westwood-nr.h
+@@ -0,0 +1,84 @@
++/* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */
++/*
++ * Copyright (c) 1991-2001 Regents of the University of California.
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *	This product includes software developed by the Computer Systems
++ *	Engineering Group at Lawrence Berkeley Laboratory.
++ * 4. Neither the name of the University nor of the Laboratory may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ */
++
++// TCPW-NR - TCPW Westwood with NewReno Features
++//
++// tcp-westwood-nr.h - v1.1 - 2002/05/20 - mvalla
++//
++
++#ifndef tcp_w_nr_h
++#define tcp_w_nr_h
++
++#include "tcp.h"
++
++/* these are bits for how to change the cwnd and ssthresh values */
++/* used by TCP-W						 */
++#define CLOSE_FASTER	0x00000400
++
++/* TCP Westwood New Reno */
++
++class WestwoodNRTcpAgent : public virtual NewRenoTcpAgent {
++public:
++	WestwoodNRTcpAgent();
++	virtual void recv(Packet *pkt, Handler*);
++	virtual void dupack_action();
++	virtual void timeout (int tno);
++	
++	/* these where originally in class TcpAgent (file: tcp.h) */
++	virtual void slowdown(int how);
++	virtual void newack(Packet* pkt);
++	virtual int  delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer);
++
++protected:
++	double lastackno_;  /* Last ACK number */
++	double lastackrx_;  /* Time last ACK was received */ 
++	double fr_alpha_;   /* exponential averaging coefficient */
++	int filter_type_;   /* exponential filter type */
++	double tau_;        /* time constant used in filter 3 */
++	
++	/* these where originally in class TcpAgent (file: tcp.h) */
++ 	int mss_;       	/* Maximum Segment Size - MGM+CC 31/08/2000 */
++	double current_bwe_;    /* Current Bandwidth estimation */
++        double last_bwe_sample_;/* Last sample used to compute BWE */
++        int unaccounted_;       /* unaccounted ACKs already received */
++        double fr_a_;           /* bandwidth reduction factor */
++        double min_rtt_estimate;/* smaller recorded RTT estimate */
++        TracedInt myseqno_;     /* my own exportable copy of seqno */
++        
++        virtual void bwe_computation(Packet *pkt);
++	
++};
++
++#endif /* tcp_w_nr_h */
+diff --git a/tcp/tcp-westwood.cc b/tcp/tcp-westwood.cc
+new file mode 100644
+index 0000000..1cbe249
+--- /dev/null
++++ b/tcp/tcp-westwood.cc
+@@ -0,0 +1,656 @@
++/* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */
++/*
++ * Copyright (c) 1990, 2001 Regents of the University of California.
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms are permitted
++ * provided that the above copyright notice and this paragraph are
++ * duplicated in all such forms and that any documentation,
++ * advertising materials, and other materials related to such
++ * distribution and use acknowledge that the software was developed
++ * by the University of California, Lawrence Berkeley Laboratory,
++ * Berkeley, CA.  The name of the University may not be used to
++ * endorse or promote products derived from this software without
++ * specific prior written permission.
++ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
++ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
++ * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
++ */
++
++// TCPW-NR - TCPW Westwood with NewReno Features
++//
++// tcp-westwood.cc - v1.3 - 2002/06/21 - mvalla
++//
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/types.h>
++#include <math.h>
++
++#include "packet.h"
++#include "ip.h"
++#include "tcp.h"
++#include "flags.h"
++#include "address.h"
++
++#include "tcp-westwood.h"
++#define DEBUG 0
++#define PDEBUG 0
++
++static class WestwoodTcpClass : public TclClass
++{
++public:
++  WestwoodTcpClass() : TclClass("Agent/TCP/Westwood") {}
++  TclObject *create(int, const char *const *)
++  {
++    return (new WestwoodTcpAgent());
++  }
++} class_westwood;
++
++WestwoodTcpAgent::WestwoodTcpAgent() : RenoTcpAgent(),
++                                       // these where originally in TcpAgent()
++                                       current_bwe_(0), last_bwe_sample_(0), unaccounted_(0),
++                                       fr_a_(0), min_rtt_estimate(5.0), myseqno_(1),
++
++                                       lastackrx_(0.0), fr_alpha_(0.9), filter_type_(1), tau_(1.0)
++{
++  // check if it has been called
++  if (DEBUG) printf("WestwoodTcpAgent() called!\n");
++
++  // (these where originally in TcpAgent() )
++  // Read defaults variables from ns-defaults.tcl
++  bind("current_bwe_", &current_bwe_);
++  bind("last_bwe_sample_", &last_bwe_sample_);
++  bind("unaccounted_", &unaccounted_);
++  bind("fr_a_", &fr_a_);
++  bind("min_rtt_estimate", &min_rtt_estimate);
++
++  bind("fr_alpha_", &fr_alpha_);
++  bind("filter_type_", &filter_type_);
++  bind("tau_", &tau_);
++}
++
++void WestwoodTcpAgent::dupack_action()
++{
++  // check if it has been called
++  if (DEBUG) printf("dupack_action() called!\n");
++
++  /* New adaptive BWE/a strategy */
++  if (ssthresh_ > cwnd_)
++  {
++    /* 3dupacks were received while I was in slowstart */
++    fr_a_ += 0.25;
++    if (fr_a_ > 4)
++      fr_a_ = 4;
++  }
++  else
++  {
++    /* 3dupacks were received while I was in congestion avoidance */
++    fr_a_ = 1;
++  }
++
++  //
++  //  ssthresh_ = (int)((current_bwe_/size_/8) * min_rtt_estimate)/fr_a_;
++  //
++
++  // WARNING!!!'a' is no longer being used
++  ssthresh_ = (int)((current_bwe_ / size_ / 8) * min_rtt_estimate);
++
++  // Safety Check: ssthresh should not be < 2
++  // added 2002-05-20 by MV
++  if (ssthresh_ < 2)
++  {
++    ssthresh_ = 2;
++  }
++
++  /* our algorithm dictates that CWIN=ssthresh after a 3DUPACK, but */
++  /* we should not forcefully increase CWIN if it is smaller than   */
++  /* ssthresh                                                       */
++
++  if (cwnd_ > ssthresh_)
++  {
++    cwnd_ = ssthresh_;
++  }
++
++  recover_ = maxseq_;                       // used by ECN
++  last_cwnd_action_ = CWND_ACTION_DUPACK;   // used by ECN
++  reset_rtx_timer(1, 0);                    // reset RTO as in Reno
++  output(last_ack_ + 1, TCP_REASON_DUPACK); // resend missing packet
++  return;
++}
++
++void WestwoodTcpAgent::timeout(int tno)
++{
++  // check if it has been called
++  if (DEBUG) printf("timeout() called!\n");
++
++  /* retransmit timer */
++  if (tno == TCP_TIMER_RTX)
++  {
++    // These three lines catch the RenoTcpAgent::timeout() behavior
++    dupwnd_ = 0;
++    dupacks_ = 0;
++    if (bug_fix_)
++      recover_ = maxseq_;
++
++    // There has been a timeout - will trace this event
++    trace_event("TIMEOUT");
++
++    if (cwnd_ < 1)
++      cwnd_ = 1;
++    if (highest_ack_ == maxseq_ && !slow_start_restart_)
++    {
++      /*
++       * TCP option:
++       * If no outstanding data, then don't do anything.
++       */
++      // Should this return be here?
++      // What if CWND_ACTION_ECN and cwnd < 1?
++      // return;
++    }
++    else
++    {
++      recover_ = maxseq_;
++      if (highest_ack_ == -1 && wnd_init_option_ == 2)
++        /*
++         * First packet dropped, so don't use larger
++         * initial windows.
++         */
++        wnd_init_option_ = 1;
++      if (highest_ack_ == maxseq_ && restart_bugfix_)
++        /*
++         * if there is no outstanding data, don't cut
++         * down ssthresh_.
++         */
++        slowdown(CLOSE_CWND_ONE);
++      else if (highest_ack_ < recover_ &&
++               last_cwnd_action_ == CWND_ACTION_ECN)
++      {
++        /*
++         * if we are in recovery from a recent ECN,
++         * don't cut down ssthresh_.
++         */
++        slowdown(CLOSE_CWND_ONE);
++      }
++      else
++      {
++        ++nrexmit_;
++        last_cwnd_action_ = CWND_ACTION_TIMEOUT;
++        // slowdown(CLOSE_SSTHRESH_HALF|CLOSE_CWND_RESTART);
++        slowdown(CLOSE_FASTER); // TCPW action
++      }
++    }
++    /* if there is no outstanding data, don't back off rtx timer */
++    if (highest_ack_ == maxseq_ && restart_bugfix_)
++    {
++      reset_rtx_timer(0, 0);
++    }
++    else
++    {
++      reset_rtx_timer(0, 1);
++    }
++    last_cwnd_action_ = CWND_ACTION_TIMEOUT;
++    send_much(0, TCP_REASON_TIMEOUT, maxburst_);
++  }
++  else
++  {
++    timeout_nonrtx(tno);
++  }
++}
++
++void WestwoodTcpAgent::recv(Packet *pkt, Handler *)
++{
++  // check if it has been called
++  if (DEBUG) printf("recv() called!\n");
++
++  if (PDEBUG) printf("1\n");
++  hdr_tcp *tcph = hdr_tcp::access(pkt);
++  ts_peer_ = tcph->ts();
++
++  double fr_now = Scheduler::instance().clock();
++
++  if (PDEBUG) printf("2\n");
++  // last_ack_ indicates the ack no. of the ack received _before_
++  // the current one
++
++  // START BWE COMPUTATION
++  // Idea: cumulative ACKs acking more than 2 packets count for 1 packet
++  //   since DUPACKs have already been accounted for
++  int cumul_ack = tcph->seqno_ - last_ack_;
++  myseqno_ = tcph->seqno_;
++  if (PDEBUG) printf("3\n");
++  if (cumul_ack > 1)
++  {
++
++    /* check if current ACK ACKs fewer or same number of segments than */
++    /* expected: if so, the missing ones were already accounted for by */
++    /* DUPACKs, and current ACK only counts as 1 */
++    if (unaccounted_ >= cumul_ack)
++    {
++      unaccounted_ = unaccounted_ - cumul_ack + 1;
++      cumul_ack = 1;
++    }
++    else
++      /* check if current ACK ACKs more segments than expected: if so,   */
++      /* part of them were already accounted for by DUPACKs; the rest    */
++      /* are cumulatively ACKed by present ACK. Make present ACK count   */
++      /* as the unacknowledged ACKs in excess*/
++      if (unaccounted_ < cumul_ack)
++      {
++        cumul_ack -= unaccounted_;
++        unaccounted_ = 0;
++      }
++  }
++  if (PDEBUG) printf("4\n");
++  /* if cumul_ack=0, the current ACK is clearly a DUPACK and should */
++  /* count 1 */
++  if (cumul_ack == 0)
++  {
++    unaccounted_++;
++    cumul_ack = 1;
++  }
++
++  /* safety check; if the previous steps are followed exactly,      */
++  /* cumul_ack should not be >2 unless some strage events occur     */
++  /* (e.g., an ACK is dropped on the way back and the following one */
++  /* appears to ACK more than its due)                              */
++  if (PDEBUG) printf("5\n");
++  if (cumul_ack > 2)
++  {
++    cumul_ack = 2;
++  }
++
++  double rtt_estimate = t_rtt_ * tcp_tick_;
++
++  if ((rtt_estimate < min_rtt_estimate) && (rtt_estimate > 0))
++  {
++    min_rtt_estimate = rtt_estimate;
++  }
++
++  nackpack_ += cumul_ack;
++
++  int acked_size = size_ * 8 * cumul_ack;
++  double ack_interv = fr_now - lastackrx_;
++  double sample_bwe;
++
++  if (PDEBUG) printf("6 %d %d %d %d\n", acked_size, ack_interv, tau_ * 2);
++  switch (filter_type_)
++  {
++  case 0:
++    //   original filter
++    sample_bwe = acked_size / ack_interv;
++    current_bwe_ = current_bwe_ * fr_alpha_ + sample_bwe * (1 - fr_alpha_);
++    break;
++
++  case 1:
++    // filter type 1
++    sample_bwe = acked_size / ack_interv;
++    current_bwe_ = current_bwe_ * .9047 +
++                   (sample_bwe + last_bwe_sample_) * .0476;
++    break;
++
++  case 2:
++    // filter type 2: 'lower' pass
++    sample_bwe = acked_size / ack_interv;
++    current_bwe_ = current_bwe_ * .93548 +
++                   (sample_bwe + last_bwe_sample_) * .03225;
++    break;
++
++  case 3:
++    // filter type 3: time constant tau_
++
++    // compute how many intervals of length tau_/2 went by since we
++    // received the last ACK. For each tau_/2 interval without ACK, feed
++    // a zero-bandwidth sample to the filter.
++
++    int idle_intervals = (int)(ack_interv / tau_ * 2);
++    //	  printf("idle_intervals = %d (%f,%f)=%f\n", idle_intervals, ack_interv, tau_,
++    //				ack_interv / tau_);
++    //		printf("idle_intervals = %d, ratio= %f\n",idle_intervals, ack_interv / tau_);
++
++    ack_interv -= tau_ / 2 * idle_intervals;
++
++    // if ( (ack_interv < 0.01) && (idle_intervals == 0) ){
++    //	printf("TCP-W error: (ack_interv < 0.01) && (idle_intervals == 0)\n");
++    //	printf("time=%lf, last_ack=%lf, ack_interv=%lf\n", fr_now, lastackrx_, ack_interv);
++    //	//exit(0);
++    // }
++
++    if ((ack_interv < 0.01) && (idle_intervals > 0))
++    {
++      // ack_interv was a multiple of tau_/2 or the remainder is too small (less than 10ms), so
++      // we consider tau_ / 2 as the last interval
++      ack_interv = tau_ / 2;
++      idle_intervals -= 1; // we do not count the last tau_/2 interval
++    }
++
++    if (PDEBUG) printf("!%d %d\n", ack_interv, idle_intervals);
++    sample_bwe = acked_size / ack_interv;
++    // Tomky debuggging
++    if (idle_intervals > 0)
++    { // feed the filter
++      if (PDEBUG) printf("idle_intervals = %d\n", idle_intervals);
++      for (int i = 0; i < idle_intervals; i++)
++      {
++        current_bwe_ = current_bwe_ * 3 / 5 + last_bwe_sample_ / 5;
++        last_bwe_sample_ = 0;
++        //  printf("idle_interval: current_bwe=%f\n", current_bwe_);
++      }
++    }
++    if (PDEBUG) printf("6 %d %d %d %d\n", acked_size, ack_interv, tau_ * 2);
++    double last_tmp_bwe = current_bwe_; // we need it just for the printf...
++    current_bwe_ = current_bwe_ * (2 * tau_ / ack_interv - 1) /
++                       (2 * tau_ / ack_interv + 1) +
++                   (sample_bwe + last_bwe_sample_) / (2 * tau_ / ack_interv + 1);
++
++    if (current_bwe_ < 0)
++    {
++      printf("TCP-W error: current_bwe_ < 0\n");
++      printf("time: %f, last_tmp_bwe=%f\n", fr_now, last_tmp_bwe);
++      printf("current_bwe_%f, ack_interv=%f, sample_bwe=%f, last_bwe_sample_=%f\n",
++             current_bwe_, ack_interv, sample_bwe, last_bwe_sample_);
++      exit(0);
++    }
++  } // end of filter_type switch
++  if (PDEBUG) printf("7\n");
++#ifdef MYDEBUG
++  hdr_ip *iph = hdr_ip::access(pkt);
++  char *src_portaddr = Address::instance().print_portaddr(iph->sport());
++  printf("sc%s: ack. no. %d at time %f, bwe=%f, cwnd = %d, ssthresh_ = %d\n",
++         src_portaddr, tcph->seqno_, fr_now, current_bwe_ / 1000000,
++         (int)cwnd_, (int)ssthresh_);
++  printf("sc%s: now = %f, acked_size = %d, rxdiff = %f, last_ack_ = %d\n",
++         src_portaddr, fr_now, acked_size, (fr_now - lastackrx_), last_ack_);
++  printf("sc%s: unaccounted_ = %d, fr_a_= %f, min_rtt_estimate = %f\n",
++         src_portaddr, unaccounted_, fr_a_, min_rtt_estimate);
++#endif
++#ifdef MYDEBUG_RTT
++  double f = t_rtt_ * tcp_tick_;
++  printf("source %s: %f cwnd=%d	      bwe=%f	  rtt=%f\n",
++         src_portaddr, fr_now, (int)cwnd_, current_bwe_ / 1000000, f);
++#endif
++#ifdef MYREPORT
++  hdr_ip *iph = hdr_ip::access(pkt);
++  char *src_portaddr = Address::instance().print_portaddr(iph->src());
++  printf("%s    %f      %d      %f      %d\n",
++         src_portaddr, fr_now, (int)cwnd_, current_bwe_ / 1000000,
++         (int)ssthresh_);
++#endif
++
++  last_bwe_sample_ = sample_bwe;
++  lastackrx_ = fr_now;
++
++  /* grow cwnd and check if the connection is done */
++  if (tcph->seqno() > last_ack_)
++  {
++    recv_newack_helper(pkt);
++    if (last_ack_ == 0 && delay_growth_)
++    {
++      cwnd_ = initial_window();
++    }
++  }
++  else if (tcph->seqno() == last_ack_)
++  {
++    if (hdr_flags::access(pkt)->eln_ && eln_)
++    {
++      tcp_eln(pkt);
++      return;
++    }
++    if (++dupacks_ == NUMDUPACKS)
++    {
++      dupack_action();
++    }
++  }
++  Packet::free(pkt);
++  /*
++   * Try to send more data.
++   */
++  send_much(0, 0, maxburst_);
++}
++
++/////////////////// Added by MV
++// these where originally in TcpAgent()
++
++void WestwoodTcpAgent::slowdown(int how)
++{
++  // check if it is called
++  if (DEBUG) printf("slowdown called\n");
++
++  double decrease; /* added for highspeed - sylvia */
++  double win, halfwin, decreasewin;
++  int slowstart = 0;
++  ++ncwndcuts_;
++  if (!(how & TCP_IDLE) && !(how & NO_OUTSTANDING_DATA))
++  {
++    ++ncwndcuts1_;
++  }
++  // we are in slowstart for sure if cwnd < ssthresh
++  if (cwnd_ < ssthresh_)
++    slowstart = 1;
++  if (precision_reduce_)
++  {
++    halfwin = windowd() / 2;
++    if (wnd_option_ == 6)
++    {
++      /* binomial controls */
++      decreasewin = windowd() - (1.0 - decrease_num_) * pow(windowd(), l_parameter_);
++    }
++    else if (wnd_option_ == 8 && (cwnd_ > low_window_))
++    {
++      /* experimental highspeed TCP */
++      decrease = decrease_param();
++      // if (decrease < 0.1)
++      //	decrease = 0.1;
++      decrease_num_ = decrease;
++      decreasewin = windowd() - (decrease * windowd());
++    }
++    else
++    {
++      decreasewin = decrease_num_ * windowd();
++    }
++    win = windowd();
++  }
++  else
++  {
++    int temp;
++    temp = (int)(window() / 2);
++    halfwin = (double)temp;
++    if (wnd_option_ == 6)
++    {
++      /* binomial controls */
++      temp = (int)(window() - (1.0 - decrease_num_) * pow(window(), l_parameter_));
++    }
++    else if ((wnd_option_ == 8) && (cwnd_ > low_window_))
++    {
++      /* experimental highspeed TCP */
++      decrease = decrease_param();
++      // if (decrease < 0.1)
++      //        decrease = 0.1;
++      decrease_num_ = decrease;
++      temp = (int)(windowd() - (decrease * windowd()));
++    }
++    else
++    {
++      temp = (int)(decrease_num_ * window());
++    }
++    decreasewin = (double)temp;
++    win = (double)window();
++  }
++  if (how & CLOSE_SSTHRESH_HALF)
++    // For the first decrease, decrease by half
++    // even for non-standard values of decrease_num_.
++    if (first_decrease_ == 1 || slowstart ||
++        last_cwnd_action_ == CWND_ACTION_TIMEOUT)
++    {
++      // Do we really want halfwin instead of decreasewin
++      // after a timeout?
++      ssthresh_ = (int)halfwin;
++    }
++    else
++    {
++      ssthresh_ = (int)decreasewin;
++    }
++  else if (how & THREE_QUARTER_SSTHRESH)
++    if (ssthresh_ < 3 * cwnd_ / 4)
++      ssthresh_ = (int)(3 * cwnd_ / 4);
++  if (how & CLOSE_CWND_HALF)
++    // For the first decrease, decrease by half
++    // even for non-standard values of decrease_num_.
++    if (first_decrease_ == 1 || slowstart || decrease_num_ == 0.5)
++    {
++      cwnd_ = halfwin;
++    }
++    else
++      cwnd_ = decreasewin;
++  else if (how & CWND_HALF_WITH_MIN)
++  {
++    // We have not thought about how non-standard TCPs, with
++    // non-standard values of decrease_num_, should respond
++    // after quiescent periods.
++    cwnd_ = decreasewin;
++    if (cwnd_ < 1)
++      cwnd_ = 1;
++  }
++  ///
++  else if (how & CLOSE_FASTER)
++  {
++    // TCP Westwood
++    // this might be critical what with the coarseness of the timer;
++    // keep in mind that TCP computes the timeout as
++    //              (#of ticks) * (tick_duration)
++    // We need to do away with the coarseness...
++
++    double rtt_estimate = t_rtt_ * tcp_tick_;
++
++    if ((rtt_estimate < min_rtt_estimate) && (rtt_estimate > 0))
++    {
++      min_rtt_estimate = rtt_estimate;
++    }
++    /* New adaptive BWE/a strategy */
++    if (ssthresh_ > cwnd_)
++    {
++      /* loss has occurred while I was in slowstart */
++      fr_a_++;
++      if (fr_a_ > 4)
++        fr_a_ = 4;
++    }
++    else
++    {
++      /* loss has occurred while I was in congestion avoidance */
++      fr_a_ = 1;
++    }
++    ssthresh_ = (int)(((current_bwe_ / size_ / 8) * min_rtt_estimate) / fr_a_);
++    cwnd_ = 1;
++  }
++  ///
++  else if (how & CLOSE_CWND_RESTART)
++    cwnd_ = int(wnd_restart_);
++  else if (how & CLOSE_CWND_INIT)
++    cwnd_ = int(wnd_init_);
++  else if (how & CLOSE_CWND_ONE)
++    cwnd_ = 1;
++  else if (how & CLOSE_CWND_HALF_WAY)
++  {
++    // cwnd_ = win - (win - W_used)/2 ;
++    cwnd_ = W_used + decrease_num_ * (win - W_used);
++    if (cwnd_ < 1)
++      cwnd_ = 1;
++  }
++  ///
++  else if (how & CLOSE_FASTER)
++  {
++    // TCP Westwood
++    // this might be critical what with the coarseness of the timer;
++    // keep in mind that TCP computes the timeout as
++    //              (#of ticks) * (tick_duration)
++    // We need to do away with the coarseness...
++
++    double rtt_estimate = t_rtt_ * tcp_tick_;
++
++    if ((rtt_estimate < min_rtt_estimate) && (rtt_estimate > 0))
++    {
++      min_rtt_estimate = rtt_estimate;
++    }
++    /* New adaptive BWE/a strategy */
++    if (ssthresh_ > cwnd_)
++    {
++      /* loss has occurred while I was in slowstart */
++      fr_a_++;
++      if (fr_a_ > 4)
++        fr_a_ = 4;
++    }
++    else
++    {
++      /* loss has occurred while I was in congestion avoidance */
++      fr_a_ = 1;
++    }
++    ssthresh_ = (int)(((current_bwe_ / size_ / 8) * min_rtt_estimate) / fr_a_);
++    cwnd_ = 1;
++  }
++  ///
++  if (ssthresh_ < 2)
++    ssthresh_ = 2;
++  if (how & (CLOSE_CWND_HALF | CLOSE_CWND_RESTART | CLOSE_CWND_INIT | CLOSE_CWND_ONE))
++    cong_action_ = TRUE;
++
++  fcnt_ = count_ = 0;
++  if (first_decrease_ == 1)
++    first_decrease_ = 0;
++  // for event tracing slow start
++  if (cwnd_ == 1 || slowstart)
++    // Not sure if this is best way to capture slow_start
++    // This is probably tracing a superset of slowdowns of
++    // which all may not be slow_start's --Padma, 07/'01.
++    trace_event("SLOW_START");
++}
++
++/*
++ * Process a packet that acks previously unacknowleged data.
++ */
++void WestwoodTcpAgent::newack(Packet *pkt)
++{
++  hdr_tcp *tcph = hdr_tcp::access(pkt);
++  myseqno_ = tcph->seqno_;
++  // call parent newack
++  RenoTcpAgent::newack(pkt);
++}
++
++// Westwood binds
++int WestwoodTcpAgent::delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer)
++{
++
++  if (delay_bind(varName, localName, "lastackno_", &lastackno_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "lastackrx_", &lastackrx_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "fr_alpha_", &fr_alpha_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "filter_type_", &filter_type_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "tau_", &tau_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "mss_", &mss_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "current_bwe_", &current_bwe_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "last_bwe_sample_", &last_bwe_sample_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "unaccounted_", &unaccounted_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "fr_a_", &fr_a_, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "min_rtt_estimate", &min_rtt_estimate, tracer))
++    return TCL_OK;
++  if (delay_bind(varName, localName, "myseqno_", &myseqno_, tracer))
++    return TCL_OK;
++
++  return RenoTcpAgent::delay_bind_dispatch(varName, localName, tracer);
++}
++
++/* tickoff is the time since the clock last ticked when
++ *  the packet we are using to compute the RTT was sent
++ */
++
++/* t_rtt_ is the number of ticks that have occurred so far,
++ * starting from the tick BEFORE the packet was sent
++ */
+diff --git a/tcp/tcp-westwood.h b/tcp/tcp-westwood.h
+new file mode 100644
+index 0000000..f36a1ed
+--- /dev/null
++++ b/tcp/tcp-westwood.h
+@@ -0,0 +1,78 @@
++/* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */
++/*
++ * Copyright (c) 1991-2001 Regents of the University of California.
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *	This product includes software developed by the Computer Systems
++ *	Engineering Group at Lawrence Berkeley Laboratory.
++ * 4. Neither the name of the University nor of the Laboratory may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * @(#) $Header: /mvalla/tcp-westwood.h,v 1.0 2001/08/07 15:14:54 mvalla Exp mvalla $ (LBL)
++ */
++
++#ifndef tcp_westwood_h
++#define tcp_westwood_h
++
++#include "tcp.h"
++
++/* these are bits for how to change the cwnd and ssthresh values */
++/* used by TCP-W						 */
++#define CLOSE_FASTER 0x00000400
++
++/* TCP Westwood */
++class WestwoodTcpAgent : public virtual RenoTcpAgent
++{
++
++public:
++  WestwoodTcpAgent();
++  virtual void recv(Packet *pkt, Handler *);
++  virtual void dupack_action();
++  virtual void timeout(int tno);
++
++  /* these where originally in class TcpAgent (file: tcp.h) */
++  virtual void slowdown(int how);
++  virtual void newack(Packet *pkt);
++  virtual int delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer);
++
++protected:
++  double lastackno_; /* Last ACK number */
++  double lastackrx_; /* Time last ACK was received */
++  double fr_alpha_;  /* exponential averaging coefficient */
++  int filter_type_;  /* exponential filter type */
++  double tau_;       /* time constant used in filter 3 */
++
++  /* these where originally in class TcpAgent (file: tcp.h) */
++  int mss_;                /* Maximum Segment Size - MGM+CC 31/08/2000 */
++  double current_bwe_;     /* Current Bandwidth estimation */
++  double last_bwe_sample_; /* Last sample used to compute BWE */
++  int unaccounted_;        /* unaccounted ACKs already received */
++  double fr_a_;            /* bandwidth reduction factor */
++  double min_rtt_estimate; /* smaller recorded RTT estimate */
++  TracedInt myseqno_;      /* my own exportable copy of seqno */
++};
++
++#endif /* tcp_westwood_h */
+diff --git a/tcp/tcp.h b/tcp/tcp.h
+index 0a9b936..911dff9 100644
+--- a/tcp/tcp.h
++++ b/tcp/tcp.h
+@@ -1,659 +1,659 @@
+-/* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */ /*
+- * Copyright (c) 1991-1997 Regents of the University of California.
+- * All rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. All advertising materials mentioning features or use of this software
+- *    must display the following acknowledgement:
+- *	This product includes software developed by the Computer Systems
+- *	Engineering Group at Lawrence Berkeley Laboratory.
+- * 4. Neither the name of the University nor of the Laboratory may be used
+- *    to endorse or promote products derived from this software without
+- *    specific prior written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+- * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+- * SUCH DAMAGE.
+- *
+- * @(#) $Header: /cvsroot/nsnam/ns-2/tcp/tcp.h,v 1.132 2011/08/26 19:29:57 tom_henderson Exp $ (LBL)
+- */
+-#ifndef ns_tcp_h
+-#define ns_tcp_h
+-
+-#include "agent.h"
+-#include "packet.h"
+-
+-//class EventTrace;
+-
+-struct hdr_tcp {
+-#define NSA 3
+-	double ts_;             /* time packet generated (at source) */
+-	double ts_echo_;        /* the echoed timestamp (originally sent by
+-	                           the peer) */
+-	int seqno_;             /* sequence number */
+-	int reason_;            /* reason for a retransmit */
+-	int sack_area_[NSA+1][2];	/* sack blocks: start, end of block */
+-	int sa_length_;         /* Indicate the number of SACKs in this  *
+-	                         * packet.  Adds 2+sack_length*8 bytes   */ 
+-	int ackno_;             /* ACK number for FullTcp */
+-	int hlen_;              /* header len (bytes) for FullTcp */
+-	int tcp_flags_;         /* TCP flags for FullTcp */
+-	int last_rtt_;		/* more recent RTT measurement in ms, */
+-				/*   for statistics only */
+-
+-	static int offset_;	// offset for this header
+-	inline static int& offset() { return offset_; }
+-	inline static hdr_tcp* access(Packet* p) {
+-		return (hdr_tcp*) p->access(offset_);
+-	}
+-
+-	/* per-field member functions */
+-	double& ts() { return (ts_); }
+-	double& ts_echo() { return (ts_echo_); }
+-	int& seqno() { return (seqno_); }
+-	int& reason() { return (reason_); }
+-	int& sa_left(int n) { return (sack_area_[n][0]); }
+-	int& sa_right(int n) { return (sack_area_[n][1]); }
+-	int& sa_length() { return (sa_length_); }
+-	int& hlen() { return (hlen_); }
+-	int& ackno() { return (ackno_); }  
+-	int& flags() { return (tcp_flags_); }
+-	int& last_rtt() { return (last_rtt_); }
+-};
+-
+-/* these are used to mark packets as to why we xmitted them */
+-#define TCP_REASON_TIMEOUT	0x01
+-#define	TCP_REASON_DUPACK	0x02
+-#define	TCP_REASON_RBP		0x03   // used only in tcp-rbp.cc
+-#define TCP_REASON_PARTIALACK   0x04
+-
+-/* these are reasons we adjusted our congestion window */
+-
+-#define	CWND_ACTION_DUPACK	1	// dup acks/fast retransmit
+-#define	CWND_ACTION_TIMEOUT	2	// retransmission timeout
+-#define	CWND_ACTION_ECN		3	// ECN bit [src quench if supported]
+-#define CWND_ACTION_EXITED      4       // congestion recovery has ended
+-					// (when previously CWND_ACTION_DUPACK)
+-
+-/* these are bits for how to change the cwnd and ssthresh values */
+-
+-#define	CLOSE_SSTHRESH_HALF	0x00000001
+-#define	CLOSE_CWND_HALF		0x00000002
+-#define	CLOSE_CWND_RESTART	0x00000004
+-#define	CLOSE_CWND_INIT		0x00000008
+-#define	CLOSE_CWND_ONE		0x00000010
+-#define CLOSE_SSTHRESH_HALVE	0x00000020
+-#define CLOSE_CWND_HALVE	0x00000040
+-#define THREE_QUARTER_SSTHRESH  0x00000080
+-#define CLOSE_CWND_HALF_WAY 	0x00000100
+-#define CWND_HALF_WITH_MIN	0x00000200
+-#define TCP_IDLE		0x00000400
+-#define NO_OUTSTANDING_DATA     0x00000800
+-
+-/*
+- * tcp_tick_:
+- * default 0.1,
+- * 0.3 for 4.3 BSD, 
+- * 0.01 for new window algorithms,
+- */
+-
+-#define NUMDUPACKS 3		/* This is no longer used.  The variable */
+-				/* numdupacks_ is used instead. */
+-#define TCP_MAXSEQ 1073741824   /* Number that curseq_ is set to for */
+-				/* "infinite send" (2^30)            */
+-
+-#define TCP_TIMER_RTX		0
+-#define TCP_TIMER_DELSND	1
+-#define TCP_TIMER_BURSTSND	2
+-#define TCP_TIMER_DELACK	3
+-#define TCP_TIMER_Q         4
+-#define TCP_TIMER_RESET        5 
+-
+-class TcpAgent;
+-
+-class RtxTimer : public TimerHandler {
+-public: 
+-	RtxTimer(TcpAgent *a) : TimerHandler() { a_ = a; }
+-protected:
+-	virtual void expire(Event *e);
+-	TcpAgent *a_;
+-};
+-
+-class DelSndTimer : public TimerHandler {
+-public: 
+-	DelSndTimer(TcpAgent *a) : TimerHandler() { a_ = a; }
+-protected:
+-	virtual void expire(Event *e);
+-	TcpAgent *a_;
+-};
+-
+-class BurstSndTimer : public TimerHandler {
+-public: 
+-	BurstSndTimer(TcpAgent *a) : TimerHandler() { a_ = a; }
+-protected:
+-	virtual void expire(Event *e);
+-	TcpAgent *a_;
+-};
+-
+-/*
+- * Variables for HighSpeed TCP.
+- */
+-//int *hs_win_;		// array of cwnd values
+-//int *hs_increase_;	// array of increase values
+-//double *hs_decrease_;	// array of decrease values
+-struct hstcp {
+-	double low_p;  // low_p
+-	double dec1;	// for computing the decrease parameter
+-	double dec2;    // for computing the decrease parameter
+-	double p1;	// for computing p
+-        double p2;	// for computing p
+-	/* The next three parameters are for CPU overhead, for computing */
+-	/*   the HighSpeed parameters less frequently.  A better solution */
+- 	/*   might be just to have a look-up array.  */
+-	double cwnd_last_;	/* last cwnd for computed parameters */
+-        double increase_last_;	/* increase param for cwnd_last_ */
+-	hstcp() : low_p(0.0), dec1(0.0), dec2(0.0), p1(0.0), p2(0.0),
+-	    cwnd_last_(0.0), increase_last_(0.0) { }
+-};
+-
+-class TcpAgent : public Agent {
+-	friend class XcpEndsys;
+-public:
+-	TcpAgent();
+-	virtual ~TcpAgent() {free(tss);}
+-        virtual void recv(Packet*, Handler*);
+-	virtual void timeout(int tno);
+-	virtual void timeout_nonrtx(int tno);
+-	int command(int argc, const char*const* argv);
+-	virtual void sendmsg(int nbytes, const char *flags = 0);
+-
+-	void trace(TracedVar* v);
+-	virtual void advanceby(int delta);
+-
+-	virtual void reset();
+-
+-	/* These two functions aid Tmix one-way TCP agents */
+-	int is_closed() {return closed_;} 
+-	void clr_closed() {closed_ = 0;}
+-protected:
+-	virtual int window();
+-	virtual double windowd();
+-	void print_if_needed(double memb_time);
+-	void traceAll();
+-	virtual void traceVar(TracedVar* v);
+-	virtual int headersize();   // a tcp header
+-
+-	virtual void delay_bind_init_all();
+-	virtual int delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer);
+-
+-	double boot_time_;	/* where between 'ticks' this sytem came up */
+-	double overhead_;
+-	double wnd_;
+-	double wnd_const_;
+-	double wnd_th_;		/* window "threshold" */
+-	double wnd_init_;
+-	double wnd_restart_;
+-	double tcp_tick_;	/* clock granularity */
+-	int wnd_option_;
+-	int wnd_init_option_;   /* 1 for using wnd_init_ */
+-				/* 2 for using large initial windows */
+-	double decrease_num_;   /* factor for multiplicative decrease */
+-	double increase_num_;   /* factor for additive increase */
+-	int tcpip_base_hdr_size_;  /* size of base TCP/IP header */
+-	int maxcwnd_;		/* max # cwnd can ever be */
+-        int numdupacks_;	/* dup ACKs before fast retransmit */
+-	int numdupacksFrac_;	/* for a larger numdupacks_ with large */
+-				/* windows */
+-
+-	/* connection and packet dynamics */
+-	virtual void output(int seqno, int reason = 0);
+-	virtual void send_much(int force, int reason, int maxburst = 0);
+-	virtual void newtimer(Packet*);
+-	virtual void dupack_action();		/* do this on dupacks */
+-	virtual void send_one();		/* do this on 1-2 dupacks */
+-	virtual void opencwnd();
+-
+-	void slowdown(int how);			/* reduce cwnd/ssthresh */
+-	void ecn(int seqno);		/* react to quench */
+-	virtual void set_initial_window();	/* set IW */
+-	double initial_window();		/* what is IW? */
+-	void newack(Packet*);
+-	void finish(); /* called when the connection is terminated */
+-	int network_limited();	/* Sending limited by network? */
+-	double limited_slow_start(double cwnd, int max_ssthresh, double increment);
+-				/* Limited slow-start for high windows */
+-	virtual int numdupacks(double cwnd); 	/* for getting numdupacks_ */
+-	/* End of section of connection and packet dynamics.  */
+-
+-	/* General dynamic state. */
+-	TracedInt t_seqno_;	/* sequence number */
+-	TracedInt dupacks_;	/* number of duplicate acks */
+-	TracedInt curseq_;	/* highest seqno "produced by app" */
+-	TracedInt highest_ack_;	/* not frozen during Fast Recovery */
+-	TracedDouble cwnd_;	/* current window */
+-	TracedInt ssthresh_;	/* slow start threshold */
+-	TracedInt maxseq_;	/* used for Karn algorithm */
+-				/* highest seqno sent so far */
+-	int last_ack_;		/* largest consecutive ACK, frozen during
+-				 *		Fast Recovery */
+-	int recover_;		/* highest pkt sent before dup acks, */
+-				/*   timeout, or source quench/ecn */
+-	int last_cwnd_action_;	/* CWND_ACTION_{TIMEOUT,DUPACK,ECN} */
+-	int count_;		/* used in window increment algorithms */
+-	int rtt_active_;	/* 1 if a rtt sample is pending */
+-	int rtt_seq_;		/* seq # of timed seg if rtt_active_ is 1 */
+-	double rtt_ts_;		/* time at which rtt_seq_ was sent */
+-	double firstsent_;	/* When first packet was sent  --Allman */
+-	double lastreset_;	/* W.N. Last time connection was reset - for */
+-				/* detecting pkts from previous incarnations */
+-	int closed_;            /* whether this connection has closed */
+-	/* End of general dynamic state. */
+-
+-	/*
+-	 * State encompassing the round-trip-time estimate.
+-	 * srtt and rttvar are stored as fixed point;
+-	 * srtt has 3 bits to the right of the binary point, rttvar has 2.
+-	 */
+-	TracedInt t_rtt_;      	/* round trip time */
+-	TracedInt t_srtt_;     	/* smoothed round-trip time */
+-	TracedInt t_rttvar_;   	/* variance in round-trip time */
+-	TracedInt t_backoff_;	/* current multiplier of RTO, */
+-				/*   1 if not backed off */
+-	#define T_RTT_BITS 0
+-	int T_SRTT_BITS;        /* exponent of weight for updating t_srtt_ */
+-	int srtt_init_;		/* initial value for computing t_srtt_ */
+-	int T_RTTVAR_BITS;      /* exponent of weight for updating t_rttvar_ */ 
+-	int rttvar_exp_;        /* exponent of multiple for t_rtxcur_ */
+-	int rttvar_init_;       /* initial value for computing t_rttvar_ */
+-	double t_rtxcur_;	/* current retransmit value */
+-	double rtxcur_init_;    /* initial value for t_rtxcur_ */
+-	virtual void rtt_init();
+-	virtual double rtt_timeout();	/* provide RTO based on RTT estimates */
+-	virtual void rtt_update(double tao);	/* update RTT estimate */
+-	virtual void rtt_backoff();		/* double multiplier */
+-	/* End of state for the round-trip-time estimate. */
+-
+-        /* RTOs: */
+-	double maxrto_;		/* max value of an RTO */
+-	double minrto_;         /* min value of an RTO */
+-	int ts_resetRTO_;	/* Un-backoff RTO after any valid RTT, */
+-				/*   including from a retransmitted pkt?  */
+-				/* The old version was "false". */
+-				/* But "true" gives better performance, and */
+-                                /* seems conformant with RFC 2988. */
+-        /* End of section for RTOs. */
+-
+-	/* Timestamps. */
+-	double ts_peer_;        /* the most recent timestamp the peer sent */
+-	double ts_echo_;        /* the most recent timestamp the peer echoed */
+-	int ts_option_size_;    // header bytes in a ts option
+-        double *tss;            // To store sent timestamps, with bugfix_ts_
+-        int tss_size_;          // Current capacity of tss
+-	int ts_option_;		/* use RFC1323-like timestamps? */
+-	/* End of timestamps. */
+-
+-	/* Helper functions.  Used by tcp-asym */
+-	virtual void output_helper(Packet*) { return; }
+-	virtual void send_helper(int) { return; }
+-	virtual void send_idle_helper() { return; }
+-	virtual void recv_helper(Packet*) { return; }
+-	virtual void recv_frto_helper(Packet*);
+-	virtual void recv_newack_helper(Packet*);
+-	virtual void partialnewack_helper(Packet*) {};
+-	/* End of helper functions. */
+-
+-	int force_wnd(int num);
+-	void spurious_timeout();
+-
+-	/* Timers */
+-	RtxTimer rtx_timer_;
+-	DelSndTimer delsnd_timer_;
+-	BurstSndTimer burstsnd_timer_;
+-	virtual void cancel_timers() {
+-		rtx_timer_.force_cancel();
+-		burstsnd_timer_.force_cancel();
+-		delsnd_timer_.force_cancel();
+-	}
+-	virtual void cancel_rtx_timer() {
+-		rtx_timer_.force_cancel();
+-	}
+-	virtual void set_rtx_timer();
+-	void reset_rtx_timer(int mild, int backoff = 1);
+-	int timerfix_;		/* set to true to update timer *after* */
+-				/* update the RTT, instead of before   */
+-	int rfc2988_;		/* Use updated RFC 2988 timers */
+-	/* End of timers. */ 
+-
+-
+-	/* For modeling SYN and SYN/ACK packets. */
+-	int syn_;		/* 1 for modeling SYN/ACK exchange */
+-	int delay_growth_;  	/* delay opening cwnd until 1st data recv'd */
+-        int max_connects_;  	/* max number of transmits for syn packet */
+-				/* -1 to allow infinite number of transmits */
+-	/* End of modeling SYN and SYN/ACK packets. */
+-
+-	/* Dynamic state for SYN packet retransmissions. */
+-	int syn_connects_;	/* number of transmits of syn packet */
+-	/* End of dynamic state for SYN packet retransmissions. */
+-
+-	/* F-RTO */
+-	int frto_enabled_;	/* != 0 to enable F-RTO */
+-	int sfrto_enabled_;	/* != 0 to enabled SACK-based F-RTO */
+-	int spurious_response_;	/* Response variant to spurious RTO */
+-	/* End of R-RTO */
+-
+-	/* Parameters for backwards compatility with old code. */ 
+-	int bug_fix_;		/* 1 for multiple-fast-retransmit fix */
+-	int less_careful_;	/* 1 for Less Careful variant of bug_fix_, */
+-				/*  for illustration only  */
+-	int exitFastRetrans_;	/* True to clean exits of Fast Retransmit */ 
+-				/* False for buggy old behavior */
+-	int bugfix_ack_;        // 1 to enable ACK heuristic, to allow
+-				//  multiple-fast-retransmits in special cases.
+-				// From Andrei Gurtov
+-	int bugfix_ts_;         // 1 to enable timestamp heuristic, to allow
+-				//  multiple-fast-retransmits in special cases.
+-				// From Andrei Gurtov
+-				// Not implemented yet.
+-	int old_ecn_;		/* For backwards compatibility with the 
+-				 * old ECN implementation, which never
+-				 * reduced the congestion window below
+-				 * one packet. */ 
+-	int bugfix_ss_;		// 1 to use window of one when SYN
+-				//  packet is dropped
+-	/* End of parameters for backwards compatility. */
+-
+-	/* Parameters for alternate congestion control mechanisms. */
+-	double k_parameter_;     /* k parameter in binomial controls */
+-	double l_parameter_;     /* l parameter in binomial controls */
+-	int precision_reduce_;  /* non-integer reduction of cwnd */
+-	int maxburst_;		/* max # packets can send back-2-back */
+-	int aggressive_maxburst_;	/* Send on a non-valid ack? */
+-	/* End of parameters for alternate congestion control mechanisms. */
+-
+-	FILE *plotfile_;
+-
+-	/* Dynamic state used for alternate congestion control mechanisms */
+-	double awnd_;		/* averaged window */
+-	int first_decrease_;	/* First decrease of congestion window.  */
+-				/* Used for decrease_num_ != 0.5. */
+-	double fcnt_;		/* used in window increment algorithms */
+-	double base_cwnd_;	/* base window (for experimental purposes) */
+-	/* End of state for alternate congestion control mechanisms */
+-
+-	/* Dynamic state only used for monitoring */
+-	int trace_all_oneline_;	/* TCP tracing vars all in one line or not? */
+-	int nam_tracevar_;      /* Output nam's variable trace or just plain 
+-				   text variable trace? */
+-        TracedInt ndatapack_;   /* number of data packets sent */
+-        TracedInt ndatabytes_;  /* number of data bytes sent */
+-        TracedInt nackpack_;    /* number of ack packets received */
+-        TracedInt nrexmit_;     /* number of retransmit timeouts 
+-				   when there was data outstanding */
+-        TracedInt nrexmitpack_; /* number of retransmited packets */
+-        TracedInt nrexmitbytes_; /* number of retransmited bytes */
+-        TracedInt necnresponses_; /* number of times cwnd was reduced
+-			   	   in response to an ecn packet -- sylvia */
+-        TracedInt ncwndcuts_; 	/* number of times cwnd was reduced 
+-				   for any reason -- sylvia */
+-        TracedInt ncwndcuts1_;     /* number of times cwnd was reduced 
+-                                   due to congestion (as opposed to idle
+-                                   periods */
+-	/* end of dynamic state for monitoring */
+-
+-	/* Specifying variants in TCP algorithms.  */
+-	int slow_start_restart_; /* boolean: re-init cwnd after connection 
+-				    goes idle.  On by default. */
+-	int restart_bugfix_;    /* ssthresh is cut down because of
+-				   timeouts during a connection's idle period.
+-				   Setting this boolean fixes this problem.
+-				   For now, it is off by default. */ 
+-        TracedInt singledup_;   /* Send on a single dup ack.  */
+-	int LimTransmitFix_;	/* To fix a bug in Limited Transmit. */
+-	int noFastRetrans_;	/* No Fast Retransmit option.  */
+-	int oldCode_;		/* Use old code. */
+-	int useHeaders_;	/* boolean: Add TCP/IP header sizes */
+-	/* end of specifying variants */
+-
+-	/* Used for ECN */
+-	int ecn_;		/* Explicit Congestion Notification */
+-	int cong_action_;	/* Congestion Action.  True to indicate
+-				   that the sender responded to congestion. */
+-        int ecn_burst_;		/* True when the previous ACK packet
+-				 *  carried ECN-Echo. */
+-	int ecn_backoff_;	/* True when retransmit timer should begin
+-			  	    to be backed off.  */
+-	int ect_;       	/* turn on ect bit now? */
+-	int SetCWRonRetransmit_;  /* True to allow setting CWR on */
+-				  /*  retransmitted packets.   Affects */
+-				  /*  performance for Reno with ECN.  */
+-	int use_rtt_;	     /* Use RTT for timeout for ECN-marked SYN-ACK */
+-	/* end of ECN */
+-
+-	/* used for Explicit Loss Notification */
+-	void tcp_eln(Packet *pkt); /* reaction to ELN (usually wireless) */
+-        int eln_;               /* Explicit Loss Notification (wireless) */
+-        int eln_rxmit_thresh_;  /* Threshold for ELN-triggered rxmissions */
+-        int eln_last_rxmit_;    /* Last packet rxmitted due to ELN info */
+-	/* end of Explicit Loss Notification */
+-
+-	/* for High-Speed TCP, RFC 3649 */
+-	double linear(double x, double x_1, double y_1, double x_2, double y_2);
+-	  /* the "linear" function is for experimental highspeed TCP */
+-	/* These four parameters define the HighSpeed response function. */
+-	int low_window_;	/* window for turning on high-speed TCP */
+-	int high_window_;	/* target window for new response function */
+-	double high_p_;		/* target drop rate for new response function */
+-	double high_decrease_;	/* decrease rate at target window */
+-	/* The next parameter is for Limited Slow-Start. */
+-	int max_ssthresh_;	/* max value for ssthresh_ */
+-
+-	/* These two functions are just an easy structuring of the code. */ 
+-	double increase_param();  /* get increase parameter for current cwnd */
+-	double decrease_param();  /* get decrease parameter for current cwnd */
+-	int cwnd_range_;	/* for determining when to recompute params. */
+-	hstcp hstcp_;		/* HighSpeed TCP variables */
+-        /* end of section for experimental high-speed TCP */
+-
+-	/* for Quick-Start, RFC 4782 */
+-	virtual void processQuickStart(Packet *pkt);
+-	virtual void endQuickStart();
+-	int lossQuickStart();
+-	int rate_request_;      /* Rate request in KBps, for QuickStart.  */
+-	int qs_enabled_;        /* to enable QuickStart. */
+-	int qs_requested_;
+-	int qs_approved_;
+-        int qs_window_;  /* >0: there are outstanding non-acked segments
+-                            from QS window */
+-        int qs_cwnd_; /* Initial window for Quick-Start */
+-        int tcp_qs_recovery_; /* != 0 if we apply slow start on packet
+-                                 losses during QS window */
+-	int qs_request_mode_;   /* 1 = Try to avoid unnecessary QS requests
+-				   for short flows. Use qs_rtt_ as the RTT
+-				   used in window calculation.
+-				   Other: Always request 'rate_request_' bytes,
+-				   regardless of flow size */
+-	int qs_thresh_;         /* Do not use QS if there are less data to send
+-				   than this. Applies only if
+-				   qs_request_mode_ == 1 */
+-	int qs_rtt_;            /* QS needs some assumption of the RTT in
+-				   in order to be able to determine how much
+-				   it needs for rate request with given amount
+-				   of data to send. milliseconds. */
+-	int print_request_;	/* true to print Quick-Start request */
+-	int ttl_diff_;
+-        /* end of section for Quick-Start. */
+-
+-	/* F-RTO: !=0 when F-RTO recovery is underway, N:th round-trip
+-	 * since RTO. Can have values between 0-2 */
+-	int frto_;
+-	int pipe_prev_; /* window size when timeout last occurred */
+-
+-        /* support for event-tracing */
+-        //EventTrace *et_;
+-        void trace_event(char *eventtype);
+-
+-	/* these function are now obsolete, see other above */
+-	void closecwnd(int how);
+-	void quench(int how);
+-        
+-	/* TCP quiescence, reducing cwnd after an idle period */
+-	void process_qoption_after_send() ;
+-	void process_qoption_after_ack(int seqno) ;
+-	void reset_qoption();	/* for QOption with EnblRTTCtr_ */
+-	void rtt_counting();	/* for QOption with EnblRTTCtr_ */
+-	int QOption_ ; /* TCP quiescence option */
+-	int EnblRTTCtr_ ; /* are we using a corase grained timer? */
+-	int T_full ; /* last time the window was full */
+-	int T_last ;
+-	int T_prev ;
+-	int T_start ;
+-	int RTT_count ;
+-	int RTT_prev ;
+-	int RTT_goodcount ;
+-	int F_counting ;
+-	int W_used ; 
+-	int W_timed ;
+-	int F_full ; 
+-	int Backoffs ;
+-	int control_increase_ ; /* If true, don't increase cwnd if sender */
+-				/*  is not window-limited.  */
+-	int prev_highest_ack_ ; /* Used to determine if sender is */
+-				/*  window-limited.  */
+-   	/* end of TCP quiescence */
+-};
+-
+-/* TCP Reno */
+-class RenoTcpAgent : public virtual TcpAgent {
+- public:
+-	RenoTcpAgent();
+-	virtual int window();
+-	virtual double windowd();
+-	virtual void recv(Packet *pkt, Handler*);
+-	virtual void timeout(int tno);
+-	virtual void dupack_action();
+- protected:
+-	int allow_fast_retransmit(int last_cwnd_action_);
+-	unsigned int dupwnd_;
+-};
+-
+-/* TCP New Reno */
+-class NewRenoTcpAgent : public virtual RenoTcpAgent {
+- public:
+-	NewRenoTcpAgent();
+-	virtual void recv(Packet *pkt, Handler*);
+-	virtual void partialnewack_helper(Packet* pkt);
+-	virtual void dupack_action();
+- protected:
+-	int newreno_changes_;	/* 0 for fixing unnecessary fast retransmits */
+-				/* 1 for additional code from Allman, */
+-				/* to implement other algorithms from */
+-				/* Hoe's paper, including sending a new */
+-				/* packet for every two duplicate ACKs. */
+-				/* The default is set to 0. */
+-	int newreno_changes1_;  /* Newreno_changes1_ set to 0 gives the */
+-				/* Slow-but-Steady variant of NewReno from */
+-				/* RFC 2582, with the retransmit timer reset */
+-				/* after each partial new ack. */  
+-				/* Newreno_changes1_ set to 1 gives the */
+-				/* Impatient variant of NewReno from */
+-				/* RFC 2582, with the retransmit timer reset */
+-				/* only for the first partial new ack. */
+-				/* The default is set to 0 */
+-	void partialnewack(Packet *pkt);
+-	int allow_fast_retransmit(int last_cwnd_action_);
+-	int acked_, new_ssthresh_;  /* used if newreno_changes_ == 1 */
+-	double ack2_, ack3_, basertt_; /* used if newreno_changes_ == 1 */
+-	int firstpartial_; 	/* For the first partial ACK. */ 
+-	int partial_window_deflation_; /* 0 if set cwnd to ssthresh upon */
+-				       /* partial new ack (default) */
+-				       /* 1 if deflate (cwnd + dupwnd) by */
+-				       /* amount of data acked */
+-				       /* "Partial window deflation" is */
+-				       /* discussed in RFC 2582. */
+-	int exit_recovery_fix_;	 /* 0 for setting cwnd to ssthresh upon */
+-				 /* leaving fast recovery (default) */
+-				 /* 1 for setting cwnd to min(ssthresh, */
+-				 /* amnt. of data in network) when leaving */
+-};
+-
+-/* TCP vegas (VegasTcpAgent) */
+-class VegasTcpAgent : public virtual TcpAgent {
+- public:
+-	VegasTcpAgent();
+-	~VegasTcpAgent();
+-	virtual void recv(Packet *pkt, Handler *);
+-	virtual void timeout(int tno);
+-protected:
+-	double vegastime() {
+-		return(Scheduler::instance().clock() - firstsent_);
+-	}
+-	virtual void output(int seqno, int reason = 0);
+-	virtual void recv_newack_helper(Packet*);
+-	int vegas_expire(Packet*); 
+-	void reset();
+-	void vegas_inflate_cwnd(int win, double current_time);
+-
+-	virtual void delay_bind_init_all();
+-	virtual int delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer);
+-
+-	double t_cwnd_changed_; // last time cwnd changed
+-	double firstrecv_;	// time recv the 1st ack
+-
+-	int    v_alpha_;    	// vegas thruput thresholds in pkts
+-	int    v_beta_;  	    	
+-
+-	int    v_gamma_;    	// threshold to change from slow-start to
+-				// congestion avoidance, in pkts
+-
+-	int    v_slowstart_;    // # of pkts to send after slow-start, deflt(2)
+-	int    v_worried_;      // # of pkts to chk after dup ack (1 or 2)
+-
+-	double v_timeout_;      // based on fine-grained timer
+-	double v_rtt_;		
+-	double v_sa_;		
+-	double v_sd_;	
+-
+-	int    v_cntRTT_;       // # of rtt measured within one rtt
+-	double v_sumRTT_;       // sum of rtt measured within one rtt
+-
+-	double v_begtime_;	// tagged pkt sent
+-	int    v_begseq_;	// tagged pkt seqno
+-
+-	double* v_sendtime_;	// each unacked pkt's sendtime is recorded.
+-	int*   v_transmits_;	// # of retx for an unacked pkt
+-
+-	int    v_maxwnd_;	// maxwnd size for v_sendtime_[]
+-	double v_newcwnd_;	// record un-inflated cwnd
+-
+-	double v_baseRTT_;	// min of all rtt
+-
+-	double v_incr_;		// amount cwnd is increased in the next rtt
+-	int    v_inc_flag_;	// if cwnd is allowed to incr for this rtt
+-
+-	double v_actual_;	// actual send rate (pkt/s; needed for tcp-rbp)
+-
+-	int ns_vegas_fix_level_;   // see comment at end of tcp-vegas.cc for details of fixes
+-};
+-
+-// Local Variables:
+-// mode:c++
+-// c-basic-offset: 8
+-// End:
+-
+-#endif
++/* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */ /*
++ * Copyright (c) 1991-1997 Regents of the University of California.
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *	This product includes software developed by the Computer Systems
++ *	Engineering Group at Lawrence Berkeley Laboratory.
++ * 4. Neither the name of the University nor of the Laboratory may be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * @(#) $Header: /cvsroot/nsnam/ns-2/tcp/tcp.h,v 1.132 2011/08/26 19:29:57 tom_henderson Exp $ (LBL)
++ */
++#ifndef ns_tcp_h
++#define ns_tcp_h
++
++#include "agent.h"
++#include "packet.h"
++
++//class EventTrace;
++
++struct hdr_tcp {
++#define NSA 3
++	double ts_;             /* time packet generated (at source) */
++	double ts_echo_;        /* the echoed timestamp (originally sent by
++	                           the peer) */
++	int seqno_;             /* sequence number */
++	int reason_;            /* reason for a retransmit */
++	int sack_area_[NSA+1][2];	/* sack blocks: start, end of block */
++	int sa_length_;         /* Indicate the number of SACKs in this  *
++	                         * packet.  Adds 2+sack_length*8 bytes   */ 
++	int ackno_;             /* ACK number for FullTcp */
++	int hlen_;              /* header len (bytes) for FullTcp */
++	int tcp_flags_;         /* TCP flags for FullTcp */
++	int last_rtt_;		/* more recent RTT measurement in ms, */
++				/*   for statistics only */
++
++	static int offset_;	// offset for this header
++	inline static int& offset() { return offset_; }
++	inline static hdr_tcp* access(Packet* p) {
++		return (hdr_tcp*) p->access(offset_);
++	}
++
++	/* per-field member functions */
++	double& ts() { return (ts_); }
++	double& ts_echo() { return (ts_echo_); }
++	int& seqno() { return (seqno_); }
++	int& reason() { return (reason_); }
++	int& sa_left(int n) { return (sack_area_[n][0]); }
++	int& sa_right(int n) { return (sack_area_[n][1]); }
++	int& sa_length() { return (sa_length_); }
++	int& hlen() { return (hlen_); }
++	int& ackno() { return (ackno_); }  
++	int& flags() { return (tcp_flags_); }
++	int& last_rtt() { return (last_rtt_); }
++};
++
++/* these are used to mark packets as to why we xmitted them */
++#define TCP_REASON_TIMEOUT	0x01
++#define	TCP_REASON_DUPACK	0x02
++#define	TCP_REASON_RBP		0x03   // used only in tcp-rbp.cc
++#define TCP_REASON_PARTIALACK   0x04
++
++/* these are reasons we adjusted our congestion window */
++
++#define	CWND_ACTION_DUPACK	1	// dup acks/fast retransmit
++#define	CWND_ACTION_TIMEOUT	2	// retransmission timeout
++#define	CWND_ACTION_ECN		3	// ECN bit [src quench if supported]
++#define CWND_ACTION_EXITED      4       // congestion recovery has ended
++					// (when previously CWND_ACTION_DUPACK)
++
++/* these are bits for how to change the cwnd and ssthresh values */
++
++#define	CLOSE_SSTHRESH_HALF	0x00000001
++#define	CLOSE_CWND_HALF		0x00000002
++#define	CLOSE_CWND_RESTART	0x00000004
++#define	CLOSE_CWND_INIT		0x00000008
++#define	CLOSE_CWND_ONE		0x00000010
++#define CLOSE_SSTHRESH_HALVE	0x00000020
++#define CLOSE_CWND_HALVE	0x00000040
++#define THREE_QUARTER_SSTHRESH  0x00000080
++#define CLOSE_CWND_HALF_WAY 	0x00000100
++#define CWND_HALF_WITH_MIN	0x00000200
++#define TCP_IDLE		0x00000400
++#define NO_OUTSTANDING_DATA     0x00000800
++
++/*
++ * tcp_tick_:
++ * default 0.1,
++ * 0.3 for 4.3 BSD, 
++ * 0.01 for new window algorithms,
++ */
++
++#define NUMDUPACKS 3		/* This is no longer used.  The variable */
++				/* numdupacks_ is used instead. */
++#define TCP_MAXSEQ 1073741824   /* Number that curseq_ is set to for */
++				/* "infinite send" (2^30)            */
++
++#define TCP_TIMER_RTX		0
++#define TCP_TIMER_DELSND	1
++#define TCP_TIMER_BURSTSND	2
++#define TCP_TIMER_DELACK	3
++#define TCP_TIMER_Q         4
++#define TCP_TIMER_RESET        5 
++
++class TcpAgent;
++
++class RtxTimer : public TimerHandler {
++public: 
++	RtxTimer(TcpAgent *a) : TimerHandler() { a_ = a; }
++protected:
++	virtual void expire(Event *e);
++	TcpAgent *a_;
++};
++
++class DelSndTimer : public TimerHandler {
++public: 
++	DelSndTimer(TcpAgent *a) : TimerHandler() { a_ = a; }
++protected:
++	virtual void expire(Event *e);
++	TcpAgent *a_;
++};
++
++class BurstSndTimer : public TimerHandler {
++public: 
++	BurstSndTimer(TcpAgent *a) : TimerHandler() { a_ = a; }
++protected:
++	virtual void expire(Event *e);
++	TcpAgent *a_;
++};
++
++/*
++ * Variables for HighSpeed TCP.
++ */
++//int *hs_win_;		// array of cwnd values
++//int *hs_increase_;	// array of increase values
++//double *hs_decrease_;	// array of decrease values
++struct hstcp {
++	double low_p;  // low_p
++	double dec1;	// for computing the decrease parameter
++	double dec2;    // for computing the decrease parameter
++	double p1;	// for computing p
++        double p2;	// for computing p
++	/* The next three parameters are for CPU overhead, for computing */
++	/*   the HighSpeed parameters less frequently.  A better solution */
++ 	/*   might be just to have a look-up array.  */
++	double cwnd_last_;	/* last cwnd for computed parameters */
++        double increase_last_;	/* increase param for cwnd_last_ */
++	hstcp() : low_p(0.0), dec1(0.0), dec2(0.0), p1(0.0), p2(0.0),
++	    cwnd_last_(0.0), increase_last_(0.0) { }
++};
++
++class TcpAgent : public Agent {
++	friend class XcpEndsys;
++public:
++	TcpAgent();
++	virtual ~TcpAgent() {free(tss);}
++        virtual void recv(Packet*, Handler*);
++	virtual void timeout(int tno);
++	virtual void timeout_nonrtx(int tno);
++	int command(int argc, const char*const* argv);
++	virtual void sendmsg(int nbytes, const char *flags = 0);
++
++	void trace(TracedVar* v);
++	virtual void advanceby(int delta);
++
++	virtual void reset();
++
++	/* These two functions aid Tmix one-way TCP agents */
++	int is_closed() {return closed_;} 
++	void clr_closed() {closed_ = 0;}
++protected:
++	virtual int window();
++	virtual double windowd();
++	void print_if_needed(double memb_time);
++	void traceAll();
++	virtual void traceVar(TracedVar* v);
++	virtual int headersize();   // a tcp header
++
++	virtual void delay_bind_init_all();
++	virtual int delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer);
++
++	double boot_time_;	/* where between 'ticks' this sytem came up */
++	double overhead_;
++	double wnd_;
++	double wnd_const_;
++	double wnd_th_;		/* window "threshold" */
++	double wnd_init_;
++	double wnd_restart_;
++	double tcp_tick_;	/* clock granularity */
++	int wnd_option_;
++	int wnd_init_option_;   /* 1 for using wnd_init_ */
++				/* 2 for using large initial windows */
++	double decrease_num_;   /* factor for multiplicative decrease */
++	double increase_num_;   /* factor for additive increase */
++	int tcpip_base_hdr_size_;  /* size of base TCP/IP header */
++	int maxcwnd_;		/* max # cwnd can ever be */
++        int numdupacks_;	/* dup ACKs before fast retransmit */
++	int numdupacksFrac_;	/* for a larger numdupacks_ with large */
++				/* windows */
++
++	/* connection and packet dynamics */
++	virtual void output(int seqno, int reason = 0);
++	virtual void send_much(int force, int reason, int maxburst = 0);
++	virtual void newtimer(Packet*);
++	virtual void dupack_action();		/* do this on dupacks */
++	virtual void send_one();		/* do this on 1-2 dupacks */
++	virtual void opencwnd();
++
++	void slowdown(int how);			/* reduce cwnd/ssthresh */
++	void ecn(int seqno);		/* react to quench */
++	virtual void set_initial_window();	/* set IW */
++	double initial_window();		/* what is IW? */
++	void newack(Packet*);
++	void finish(); /* called when the connection is terminated */
++	int network_limited();	/* Sending limited by network? */
++	double limited_slow_start(double cwnd, int max_ssthresh, double increment);
++				/* Limited slow-start for high windows */
++	virtual int numdupacks(double cwnd); 	/* for getting numdupacks_ */
++	/* End of section of connection and packet dynamics.  */
++
++	/* General dynamic state. */
++	TracedInt t_seqno_;	/* sequence number */
++	TracedInt dupacks_;	/* number of duplicate acks */
++	TracedInt curseq_;	/* highest seqno "produced by app" */
++	TracedInt highest_ack_;	/* not frozen during Fast Recovery */
++	TracedDouble cwnd_;	/* current window */
++	TracedInt ssthresh_;	/* slow start threshold */
++	TracedInt maxseq_;	/* used for Karn algorithm */
++				/* highest seqno sent so far */
++	int last_ack_;		/* largest consecutive ACK, frozen during
++				 *		Fast Recovery */
++	int recover_;		/* highest pkt sent before dup acks, */
++				/*   timeout, or source quench/ecn */
++	int last_cwnd_action_;	/* CWND_ACTION_{TIMEOUT,DUPACK,ECN} */
++	int count_;		/* used in window increment algorithms */
++	int rtt_active_;	/* 1 if a rtt sample is pending */
++	int rtt_seq_;		/* seq # of timed seg if rtt_active_ is 1 */
++	double rtt_ts_;		/* time at which rtt_seq_ was sent */
++	double firstsent_;	/* When first packet was sent  --Allman */
++	double lastreset_;	/* W.N. Last time connection was reset - for */
++				/* detecting pkts from previous incarnations */
++	int closed_;            /* whether this connection has closed */
++	/* End of general dynamic state. */
++
++	/*
++	 * State encompassing the round-trip-time estimate.
++	 * srtt and rttvar are stored as fixed point;
++	 * srtt has 3 bits to the right of the binary point, rttvar has 2.
++	 */
++	TracedInt t_rtt_;      	/* round trip time */
++	TracedInt t_srtt_;     	/* smoothed round-trip time */
++	TracedInt t_rttvar_;   	/* variance in round-trip time */
++	TracedInt t_backoff_;	/* current multiplier of RTO, */
++				/*   1 if not backed off */
++	#define T_RTT_BITS 0
++	int T_SRTT_BITS;        /* exponent of weight for updating t_srtt_ */
++	int srtt_init_;		/* initial value for computing t_srtt_ */
++	int T_RTTVAR_BITS;      /* exponent of weight for updating t_rttvar_ */ 
++	int rttvar_exp_;        /* exponent of multiple for t_rtxcur_ */
++	int rttvar_init_;       /* initial value for computing t_rttvar_ */
++	double t_rtxcur_;	/* current retransmit value */
++	double rtxcur_init_;    /* initial value for t_rtxcur_ */
++	virtual void rtt_init();
++	virtual double rtt_timeout();	/* provide RTO based on RTT estimates */
++	virtual void rtt_update(double tao);	/* update RTT estimate */
++	virtual void rtt_backoff();		/* double multiplier */
++	/* End of state for the round-trip-time estimate. */
++
++        /* RTOs: */
++	double maxrto_;		/* max value of an RTO */
++	double minrto_;         /* min value of an RTO */
++	int ts_resetRTO_;	/* Un-backoff RTO after any valid RTT, */
++				/*   including from a retransmitted pkt?  */
++				/* The old version was "false". */
++				/* But "true" gives better performance, and */
++                                /* seems conformant with RFC 2988. */
++        /* End of section for RTOs. */
++
++	/* Timestamps. */
++	double ts_peer_;        /* the most recent timestamp the peer sent */
++	double ts_echo_;        /* the most recent timestamp the peer echoed */
++	int ts_option_size_;    // header bytes in a ts option
++        double *tss;            // To store sent timestamps, with bugfix_ts_
++        int tss_size_;          // Current capacity of tss
++	int ts_option_;		/* use RFC1323-like timestamps? */
++	/* End of timestamps. */
++
++	/* Helper functions.  Used by tcp-asym */
++	virtual void output_helper(Packet*) { return; }
++	virtual void send_helper(int) { return; }
++	virtual void send_idle_helper() { return; }
++	virtual void recv_helper(Packet*) { return; }
++	virtual void recv_frto_helper(Packet*);
++	virtual void recv_newack_helper(Packet*);
++	virtual void partialnewack_helper(Packet*) {};
++	/* End of helper functions. */
++
++	int force_wnd(int num);
++	void spurious_timeout();
++
++	/* Timers */
++	RtxTimer rtx_timer_;
++	DelSndTimer delsnd_timer_;
++	BurstSndTimer burstsnd_timer_;
++	virtual void cancel_timers() {
++		rtx_timer_.force_cancel();
++		burstsnd_timer_.force_cancel();
++		delsnd_timer_.force_cancel();
++	}
++	virtual void cancel_rtx_timer() {
++		rtx_timer_.force_cancel();
++	}
++	virtual void set_rtx_timer();
++	void reset_rtx_timer(int mild, int backoff = 1);
++	int timerfix_;		/* set to true to update timer *after* */
++				/* update the RTT, instead of before   */
++	int rfc2988_;		/* Use updated RFC 2988 timers */
++	/* End of timers. */ 
++
++
++	/* For modeling SYN and SYN/ACK packets. */
++	int syn_;		/* 1 for modeling SYN/ACK exchange */
++	int delay_growth_;  	/* delay opening cwnd until 1st data recv'd */
++        int max_connects_;  	/* max number of transmits for syn packet */
++				/* -1 to allow infinite number of transmits */
++	/* End of modeling SYN and SYN/ACK packets. */
++
++	/* Dynamic state for SYN packet retransmissions. */
++	int syn_connects_;	/* number of transmits of syn packet */
++	/* End of dynamic state for SYN packet retransmissions. */
++
++	/* F-RTO */
++	int frto_enabled_;	/* != 0 to enable F-RTO */
++	int sfrto_enabled_;	/* != 0 to enabled SACK-based F-RTO */
++	int spurious_response_;	/* Response variant to spurious RTO */
++	/* End of R-RTO */
++
++	/* Parameters for backwards compatility with old code. */ 
++	int bug_fix_;		/* 1 for multiple-fast-retransmit fix */
++	int less_careful_;	/* 1 for Less Careful variant of bug_fix_, */
++				/*  for illustration only  */
++	int exitFastRetrans_;	/* True to clean exits of Fast Retransmit */ 
++				/* False for buggy old behavior */
++	int bugfix_ack_;        // 1 to enable ACK heuristic, to allow
++				//  multiple-fast-retransmits in special cases.
++				// From Andrei Gurtov
++	int bugfix_ts_;         // 1 to enable timestamp heuristic, to allow
++				//  multiple-fast-retransmits in special cases.
++				// From Andrei Gurtov
++				// Not implemented yet.
++	int old_ecn_;		/* For backwards compatibility with the 
++				 * old ECN implementation, which never
++				 * reduced the congestion window below
++				 * one packet. */ 
++	int bugfix_ss_;		// 1 to use window of one when SYN
++				//  packet is dropped
++	/* End of parameters for backwards compatility. */
++
++	/* Parameters for alternate congestion control mechanisms. */
++	double k_parameter_;     /* k parameter in binomial controls */
++	double l_parameter_;     /* l parameter in binomial controls */
++	int precision_reduce_;  /* non-integer reduction of cwnd */
++	int maxburst_;		/* max # packets can send back-2-back */
++	int aggressive_maxburst_;	/* Send on a non-valid ack? */
++	/* End of parameters for alternate congestion control mechanisms. */
++
++	FILE *plotfile_;
++
++	/* Dynamic state used for alternate congestion control mechanisms */
++	double awnd_;		/* averaged window */
++	int first_decrease_;	/* First decrease of congestion window.  */
++				/* Used for decrease_num_ != 0.5. */
++	double fcnt_;		/* used in window increment algorithms */
++	double base_cwnd_;	/* base window (for experimental purposes) */
++	/* End of state for alternate congestion control mechanisms */
++
++	/* Dynamic state only used for monitoring */
++	int trace_all_oneline_;	/* TCP tracing vars all in one line or not? */
++	int nam_tracevar_;      /* Output nam's variable trace or just plain 
++				   text variable trace? */
++        TracedInt ndatapack_;   /* number of data packets sent */
++        TracedInt ndatabytes_;  /* number of data bytes sent */
++        TracedInt nackpack_;    /* number of ack packets received */
++        TracedInt nrexmit_;     /* number of retransmit timeouts 
++				   when there was data outstanding */
++        TracedInt nrexmitpack_; /* number of retransmited packets */
++        TracedInt nrexmitbytes_; /* number of retransmited bytes */
++        TracedInt necnresponses_; /* number of times cwnd was reduced
++			   	   in response to an ecn packet -- sylvia */
++        TracedInt ncwndcuts_; 	/* number of times cwnd was reduced 
++				   for any reason -- sylvia */
++        TracedInt ncwndcuts1_;     /* number of times cwnd was reduced 
++                                   due to congestion (as opposed to idle
++                                   periods */
++	/* end of dynamic state for monitoring */
++
++	/* Specifying variants in TCP algorithms.  */
++	int slow_start_restart_; /* boolean: re-init cwnd after connection 
++				    goes idle.  On by default. */
++	int restart_bugfix_;    /* ssthresh is cut down because of
++				   timeouts during a connection's idle period.
++				   Setting this boolean fixes this problem.
++				   For now, it is off by default. */ 
++        TracedInt singledup_;   /* Send on a single dup ack.  */
++	int LimTransmitFix_;	/* To fix a bug in Limited Transmit. */
++	int noFastRetrans_;	/* No Fast Retransmit option.  */
++	int oldCode_;		/* Use old code. */
++	int useHeaders_;	/* boolean: Add TCP/IP header sizes */
++	/* end of specifying variants */
++
++	/* Used for ECN */
++	int ecn_;		/* Explicit Congestion Notification */
++	int cong_action_;	/* Congestion Action.  True to indicate
++				   that the sender responded to congestion. */
++        int ecn_burst_;		/* True when the previous ACK packet
++				 *  carried ECN-Echo. */
++	int ecn_backoff_;	/* True when retransmit timer should begin
++			  	    to be backed off.  */
++	int ect_;       	/* turn on ect bit now? */
++	int SetCWRonRetransmit_;  /* True to allow setting CWR on */
++				  /*  retransmitted packets.   Affects */
++				  /*  performance for Reno with ECN.  */
++	int use_rtt_;	     /* Use RTT for timeout for ECN-marked SYN-ACK */
++	/* end of ECN */
++
++	/* used for Explicit Loss Notification */
++	void tcp_eln(Packet *pkt); /* reaction to ELN (usually wireless) */
++        int eln_;               /* Explicit Loss Notification (wireless) */
++        int eln_rxmit_thresh_;  /* Threshold for ELN-triggered rxmissions */
++        int eln_last_rxmit_;    /* Last packet rxmitted due to ELN info */
++	/* end of Explicit Loss Notification */
++
++	/* for High-Speed TCP, RFC 3649 */
++	double linear(double x, double x_1, double y_1, double x_2, double y_2);
++	  /* the "linear" function is for experimental highspeed TCP */
++	/* These four parameters define the HighSpeed response function. */
++	int low_window_;	/* window for turning on high-speed TCP */
++	int high_window_;	/* target window for new response function */
++	double high_p_;		/* target drop rate for new response function */
++	double high_decrease_;	/* decrease rate at target window */
++	/* The next parameter is for Limited Slow-Start. */
++	int max_ssthresh_;	/* max value for ssthresh_ */
++
++	/* These two functions are just an easy structuring of the code. */ 
++	double increase_param();  /* get increase parameter for current cwnd */
++	double decrease_param();  /* get decrease parameter for current cwnd */
++	int cwnd_range_;	/* for determining when to recompute params. */
++	hstcp hstcp_;		/* HighSpeed TCP variables */
++        /* end of section for experimental high-speed TCP */
++
++	/* for Quick-Start, RFC 4782 */
++	virtual void processQuickStart(Packet *pkt);
++	virtual void endQuickStart();
++	int lossQuickStart();
++	int rate_request_;      /* Rate request in KBps, for QuickStart.  */
++	int qs_enabled_;        /* to enable QuickStart. */
++	int qs_requested_;
++	int qs_approved_;
++        int qs_window_;  /* >0: there are outstanding non-acked segments
++                            from QS window */
++        int qs_cwnd_; /* Initial window for Quick-Start */
++        int tcp_qs_recovery_; /* != 0 if we apply slow start on packet
++                                 losses during QS window */
++	int qs_request_mode_;   /* 1 = Try to avoid unnecessary QS requests
++				   for short flows. Use qs_rtt_ as the RTT
++				   used in window calculation.
++				   Other: Always request 'rate_request_' bytes,
++				   regardless of flow size */
++	int qs_thresh_;         /* Do not use QS if there are less data to send
++				   than this. Applies only if
++				   qs_request_mode_ == 1 */
++	int qs_rtt_;            /* QS needs some assumption of the RTT in
++				   in order to be able to determine how much
++				   it needs for rate request with given amount
++				   of data to send. milliseconds. */
++	int print_request_;	/* true to print Quick-Start request */
++	int ttl_diff_;
++        /* end of section for Quick-Start. */
++
++	/* F-RTO: !=0 when F-RTO recovery is underway, N:th round-trip
++	 * since RTO. Can have values between 0-2 */
++	int frto_;
++	int pipe_prev_; /* window size when timeout last occurred */
++
++        /* support for event-tracing */
++        //EventTrace *et_;
++        void trace_event(char *eventtype);
++
++	/* these function are now obsolete, see other above */
++	void closecwnd(int how);
++	void quench(int how);
++        
++	/* TCP quiescence, reducing cwnd after an idle period */
++	void process_qoption_after_send() ;
++	void process_qoption_after_ack(int seqno) ;
++	void reset_qoption();	/* for QOption with EnblRTTCtr_ */
++	void rtt_counting();	/* for QOption with EnblRTTCtr_ */
++	int QOption_ ; /* TCP quiescence option */
++	int EnblRTTCtr_ ; /* are we using a corase grained timer? */
++	int T_full ; /* last time the window was full */
++	int T_last ;
++	int T_prev ;
++	int T_start ;
++	int RTT_count ;
++	int RTT_prev ;
++	int RTT_goodcount ;
++	int F_counting ;
++	int W_used ; 
++	int W_timed ;
++	int F_full ; 
++	int Backoffs ;
++	int control_increase_ ; /* If true, don't increase cwnd if sender */
++				/*  is not window-limited.  */
++	int prev_highest_ack_ ; /* Used to determine if sender is */
++				/*  window-limited.  */
++   	/* end of TCP quiescence */
++};
++
++/* TCP Reno */
++class RenoTcpAgent : public virtual TcpAgent {
++ public:
++	RenoTcpAgent();
++	virtual int window();
++	virtual double windowd();
++	virtual void recv(Packet *pkt, Handler*);
++	virtual void timeout(int tno);
++	virtual void dupack_action();
++ protected:
++	int allow_fast_retransmit(int last_cwnd_action_);
++	unsigned int dupwnd_;
++};
++
++/* TCP New Reno */
++class NewRenoTcpAgent : public virtual RenoTcpAgent {
++ public:
++	NewRenoTcpAgent();
++	virtual void recv(Packet *pkt, Handler*);
++	virtual void partialnewack_helper(Packet* pkt);
++	virtual void dupack_action();
++ protected:
++	int newreno_changes_;	/* 0 for fixing unnecessary fast retransmits */
++				/* 1 for additional code from Allman, */
++				/* to implement other algorithms from */
++				/* Hoe's paper, including sending a new */
++				/* packet for every two duplicate ACKs. */
++				/* The default is set to 0. */
++	int newreno_changes1_;  /* Newreno_changes1_ set to 0 gives the */
++				/* Slow-but-Steady variant of NewReno from */
++				/* RFC 2582, with the retransmit timer reset */
++				/* after each partial new ack. */  
++				/* Newreno_changes1_ set to 1 gives the */
++				/* Impatient variant of NewReno from */
++				/* RFC 2582, with the retransmit timer reset */
++				/* only for the first partial new ack. */
++				/* The default is set to 0 */
++	void partialnewack(Packet *pkt);
++	int allow_fast_retransmit(int last_cwnd_action_);
++	int acked_, new_ssthresh_;  /* used if newreno_changes_ == 1 */
++	double ack2_, ack3_, basertt_; /* used if newreno_changes_ == 1 */
++	int firstpartial_; 	/* For the first partial ACK. */ 
++	int partial_window_deflation_; /* 0 if set cwnd to ssthresh upon */
++				       /* partial new ack (default) */
++				       /* 1 if deflate (cwnd + dupwnd) by */
++				       /* amount of data acked */
++				       /* "Partial window deflation" is */
++				       /* discussed in RFC 2582. */
++	int exit_recovery_fix_;	 /* 0 for setting cwnd to ssthresh upon */
++				 /* leaving fast recovery (default) */
++				 /* 1 for setting cwnd to min(ssthresh, */
++				 /* amnt. of data in network) when leaving */
++};
++
++/* TCP vegas (VegasTcpAgent) */
++class VegasTcpAgent : public virtual TcpAgent {
++ public:
++	VegasTcpAgent();
++	~VegasTcpAgent();
++	virtual void recv(Packet *pkt, Handler *);
++	virtual void timeout(int tno);
++protected:
++	double vegastime() {
++		return(Scheduler::instance().clock() - firstsent_);
++	}
++	virtual void output(int seqno, int reason = 0);
++	virtual void recv_newack_helper(Packet*);
++	int vegas_expire(Packet*); 
++	void reset();
++	void vegas_inflate_cwnd(int win, double current_time);
++
++	virtual void delay_bind_init_all();
++	virtual int delay_bind_dispatch(const char *varName, const char *localName, TclObject *tracer);
++
++	double t_cwnd_changed_; // last time cwnd changed
++	double firstrecv_;	// time recv the 1st ack
++
++	int    v_alpha_;    	// vegas thruput thresholds in pkts
++	int    v_beta_;  	    	
++
++	int    v_gamma_;    	// threshold to change from slow-start to
++				// congestion avoidance, in pkts
++
++	int    v_slowstart_;    // # of pkts to send after slow-start, deflt(2)
++	int    v_worried_;      // # of pkts to chk after dup ack (1 or 2)
++
++	double v_timeout_;      // based on fine-grained timer
++	double v_rtt_;		
++	double v_sa_;		
++	double v_sd_;	
++
++	int    v_cntRTT_;       // # of rtt measured within one rtt
++	double v_sumRTT_;       // sum of rtt measured within one rtt
++
++	double v_begtime_;	// tagged pkt sent
++	int    v_begseq_;	// tagged pkt seqno
++
++	double* v_sendtime_;	// each unacked pkt's sendtime is recorded.
++	int*   v_transmits_;	// # of retx for an unacked pkt
++
++	int    v_maxwnd_;	// maxwnd size for v_sendtime_[]
++	double v_newcwnd_;	// record un-inflated cwnd
++
++	double v_baseRTT_;	// min of all rtt
++
++	double v_incr_;		// amount cwnd is increased in the next rtt
++	int    v_inc_flag_;	// if cwnd is allowed to incr for this rtt
++
++	double v_actual_;	// actual send rate (pkt/s; needed for tcp-rbp)
++
++	int ns_vegas_fix_level_;   // see comment at end of tcp-vegas.cc for details of fixes
++};
++
++// Local Variables:
++// mode:c++
++// c-basic-offset: 8
++// End:
++
++#endif
